@@ -19,7 +19,7 @@
 #'   - `m`: n x k class mean curves,
 #'   - `t`, `h`, `k`, `keywords`.
 #' @export
-lj_pipeline <- function(X, t, h, k) {
+ljmds.pipeline <- function(X, t, h, k) {
   X <- as.matrix(X); X[X > 0] <- 1
   storage.mode(X) <- "double"
   n <- nrow(X); p <- ncol(X)

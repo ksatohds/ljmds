@@ -24,7 +24,7 @@ Hiroshima.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{f <- system.file("extdata", "peace_declaration.csv",
                  package = "ljmds")
-d <- lj_read_csv(f)
+d <- ljmds.read.csv(f)
 }\if{html}{\out{</div>}}
 }
 

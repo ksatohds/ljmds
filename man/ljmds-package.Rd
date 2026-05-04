@@ -16,11 +16,11 @@ joint selection of bandwidth and class number.
 \section{Main entry points}{
 
 \itemize{
-\item \code{\link[=lj_read_csv]{lj_read_csv()}} reads a \verb{(year, keyword1, keyword2, ...)} CSV.
-\item \code{\link[=lj_select]{lj_select()}} performs joint (h, k) selection.
-\item \code{\link[=lj_pipeline]{lj_pipeline()}} runs the full pipeline at fixed (h, k).
+\item \code{\link[=ljmds.read.csv]{ljmds.read.csv()}} reads a \verb{(year, keyword1, keyword2, ...)} CSV.
+\item \code{\link[=ljmds.select]{ljmds.select()}} performs joint (h, k) selection.
+\item \code{\link[=ljmds.pipeline]{ljmds.pipeline()}} runs the full pipeline at fixed (h, k).
 \item \code{\link[=plot.ljmds]{plot.ljmds()}} reproduces the diagnostic figures.
-\item \code{\link[=lj_animate]{lj_animate()}} writes a GIF of the trajectory map.
+\item \code{\link[=ljmds.animate]{ljmds.animate()}} writes a GIF of the trajectory map.
 }
 }
 

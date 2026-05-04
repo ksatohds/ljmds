@@ -13,13 +13,13 @@
 #'   the interpretation and validation of cluster analysis.
 #'   *Journal of Computational and Applied Mathematics* **20**, 53--65.
 #' @export
-lj_silhouette <- function(f, cl) {
-  mean(lj_silhouette_per_keyword(f, cl))
+ljmds.silhouette <- function(f, cl) {
+  mean(ljmds.silhouette.per.keyword(f, cl))
 }
 
-#' @rdname lj_silhouette
+#' @rdname ljmds.silhouette
 #' @export
-lj_silhouette_per_keyword <- function(f, cl) {
+ljmds.silhouette.per.keyword <- function(f, cl) {
   pp <- ncol(f); uc <- sort(unique(cl))
   D <- matrix(0, pp, pp)
   for (j in 1:(pp - 1)) for (i in (j + 1):pp) {

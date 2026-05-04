@@ -27,7 +27,7 @@ library(ljmds)
 
 ```{r load}
 csv <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-d   <- lj_read_csv(csv)
+d   <- ljmds.read.csv(csv)
 dim(d$X)                  # 78 x 95
 range(d$t)                # 1947 2025
 head(d$keywords, 10)
@@ -41,7 +41,7 @@ a finer grid is recommended in practice (e.g.,
 `k_grid = 2:6`).
 
 ```{r select}
-sel <- lj_select(d$X, d$t,
+sel <- ljmds.select(d$X, d$t,
                  h_grid = c(8, 12),
                  k_grid = 3:4)
 sel$h_hat
@@ -52,7 +52,7 @@ round(sel$S, 3)
 ## 3. Run the pipeline at $(k, h) = (4, 8)$
 
 ```{r fit}
-fit <- lj_pipeline(d$X, d$t, h = 8, k = 4)
+fit <- ljmds.pipeline(d$X, d$t, h = 8, k = 4)
 ```
 
 ## 4. Figures from the paper
@@ -104,6 +104,6 @@ file to the current working directory; takes about two
 minutes), uncomment and run:
 
 ```{r regen-gif, eval = FALSE}
-# gif <- lj_animate(fit, file = "peace_declaration.gif",
+# gif <- ljmds.animate(fit, file = "peace_declaration.gif",
 #                   trail = 10, fps = 2)
 ```

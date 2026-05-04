@@ -32,17 +32,17 @@ library(ljmds)
 
 # Peace Declaration of Hiroshima
 csv <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-d   <- lj_read_csv(csv)             # year + 95 keyword 0/1 columns
+d   <- ljmds.read.csv(csv)             # year + 95 keyword 0/1 columns
 
 # Joint (h, k) selection over a grid
-sel <- lj_select(d$X, d$t,
+sel <- ljmds.select(d$X, d$t,
                  h_grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20, 30, 50),
                  k_grid = 3:6)
 sel$h_hat   # 8
 sel$k_hat   # 4
 
 # Full pipeline
-fit <- lj_pipeline(d$X, d$t, h = sel$h_hat, k = sel$k_hat)
+fit <- ljmds.pipeline(d$X, d$t, h = sel$h_hat, k = sel$k_hat)
 
 # Figures
 plot(fit, type = "trajectory")    # centroid trajectories on MDS map
@@ -53,7 +53,7 @@ plot(fit, type = "panels")        # per-class small multiples
 plot(sel)                          # silhouette over the (h, k) grid
 
 # GIF animation
-lj_animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
+ljmds.animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
 ```
 
 ## Data

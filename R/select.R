@@ -1,7 +1,7 @@
 #' Joint (h, k) selection by functional Rousseeuw silhouette
 #'
 #' For each candidate bandwidth `h_grid[i]` and class number
-#' `k_grid[j]`, runs [lj_pipeline()] and computes the functional
+#' `k_grid[j]`, runs [ljmds.pipeline()] and computes the functional
 #' Rousseeuw silhouette of the resulting partition.  Returns the
 #' grid of silhouette values and the maximizer over `k >= k_min`
 #' (default 3, to avoid the trivial k = 2 split).
@@ -17,14 +17,14 @@
 #'   - `S_hat`: silhouette at the maximizer,
 #'   - `h_grid`, `k_grid`, `k_min`.
 #' @export
-lj_select <- function(X, t, h_grid, k_grid = 2:6, k_min = 3) {
+ljmds.select <- function(X, t, h_grid, k_grid = 2:6, k_min = 3) {
   S <- matrix(NA_real_, length(h_grid), length(k_grid),
               dimnames = list(paste0("h", h_grid),
                               paste0("k", k_grid)))
   for (i in seq_along(h_grid)) {
     for (j in seq_along(k_grid)) {
-      fit <- lj_pipeline(X, t, h = h_grid[i], k = k_grid[j])
-      S[i, j] <- lj_silhouette(fit$f, fit$labels)
+      fit <- ljmds.pipeline(X, t, h = h_grid[i], k = k_grid[j])
+      S[i, j] <- ljmds.silhouette(fit$f, fit$labels)
     }
   }
   ## maximizer over admissible k

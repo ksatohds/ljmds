@@ -8,11 +8,11 @@
 #' joint selection of bandwidth and class number.
 #'
 #' @section Main entry points:
-#' - [lj_read_csv()] reads a `(year, keyword1, keyword2, ...)` CSV.
-#' - [lj_select()] performs joint (h, k) selection.
-#' - [lj_pipeline()] runs the full pipeline at fixed (h, k).
+#' - [ljmds.read.csv()] reads a `(year, keyword1, keyword2, ...)` CSV.
+#' - [ljmds.select()] performs joint (h, k) selection.
+#' - [ljmds.pipeline()] runs the full pipeline at fixed (h, k).
 #' - [plot.ljmds()] reproduces the diagnostic figures.
-#' - [lj_animate()] writes a GIF of the trajectory map.
+#' - [ljmds.animate()] writes a GIF of the trajectory map.
 #'
 #' @section Example data:
 #' Two binary corpora ship as CSV under `inst/extdata`; see

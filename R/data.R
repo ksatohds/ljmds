@@ -11,11 +11,11 @@
 #' @export
 #' @examples
 #' f <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-#' d <- lj_read_csv(f)
+#' d <- ljmds.read.csv(f)
 #' dim(d$X)              # 78 95
 #' length(d$t)           # 78
 #' head(d$keywords)      # first six keywords
-lj_read_csv <- function(file) {
+ljmds.read.csv <- function(file) {
   d <- utils::read.csv(file, check.names = FALSE)
   t <- d[, 1]; X <- as.matrix(d[, -1])
   X[X > 0] <- 1
@@ -41,7 +41,7 @@ lj_read_csv <- function(file) {
 #' ```r
 #' f <- system.file("extdata", "peace_declaration.csv",
 #'                  package = "ljmds")
-#' d <- lj_read_csv(f)
+#' d <- ljmds.read.csv(f)
 #' ```
 #'
 #' @name ljmds_data

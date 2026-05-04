@@ -5,7 +5,7 @@
 #' occurrence \eqn{f_j(t)}, class colours, and a fading trail of the
 #' class centroids over the previous `trail` frames.
 #'
-#' @param x An object returned by [lj_pipeline()].
+#' @param x An object returned by [ljmds.pipeline()].
 #' @param file Output GIF path.
 #' @param trail Number of trailing frames for the centroid trail.
 #' @param fps Frames per second.
@@ -14,13 +14,13 @@
 #'   if `NULL` (default) a temporary directory is used.
 #' @return The output GIF file path (invisibly).
 #' @export
-lj_animate <- function(x, file = "ljmds_animation.gif",
+ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        trail = 7, fps = 2,
                        mycol = c("green4", "purple", "red", "orange"),
                        frame_dir = NULL) {
   stopifnot(inherits(x, "ljmds"))
   if (!requireNamespace("magick", quietly = TRUE))
-    stop("Package 'magick' is required for lj_animate().")
+    stop("Package 'magick' is required for ljmds.animate().")
 
   n <- nrow(x$xs); p <- ncol(x$xs)
   cols <- mycol[(seq_len(x$k) - 1) %% length(mycol) + 1]

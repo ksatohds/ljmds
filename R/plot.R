@@ -10,7 +10,7 @@
 #' - `"panels"`: 2x2 small multiples, one panel per class, showing
 #'    individual smoothed curves and the class mean.
 #'
-#' @param x An object returned by [lj_pipeline()].
+#' @param x An object returned by [ljmds.pipeline()].
 #' @param type One of `"trajectory"`, `"dendrogram"`, `"cmd"`,
 #'   `"means"`, `"panels"`.
 #' @param mycol Optional 4-colour palette for the classes.

@@ -15,7 +15,7 @@
 \method{plot}{ljmds_sel}(x, mycol = c("green4", "purple", "red", "orange"), ...)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=lj_pipeline]{lj_pipeline()}}.}
+\item{x}{An object returned by \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}.}
 
 \item{type}{One of \code{"trajectory"}, \code{"dendrogram"}, \code{"cmd"},
 \code{"means"}, \code{"panels"}.}
