@@ -1,8 +1,8 @@
-# ljmds: Local Jaccard MDS for Longitudinal Binary Indicator Data
+# ljmds: Local Jaccard MDS for Longitudinal Binary Data
 
 R package implementing the methodology of Satoh (2026): visualisation
-of longitudinal binary indicator data (time × attribute 0/1 matrix)
-by a locally weighted Jaccard distance, multidimensional scaling with
+of longitudinal binary data (a time × attribute 0/1 matrix) by a
+locally weighted Jaccard distance, multidimensional scaling with
 sequential modification (Mizuta, 2003), Ward clustering on a
 trajectory distance, and a functional Rousseeuw silhouette criterion
 for joint selection of bandwidth and class number.

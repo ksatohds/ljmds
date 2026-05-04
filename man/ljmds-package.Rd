@@ -4,10 +4,10 @@
 \name{ljmds-package}
 \alias{ljmds}
 \alias{ljmds-package}
-\title{ljmds: Local Jaccard MDS for Longitudinal Binary Text Data}
+\title{ljmds: Local Jaccard MDS for Longitudinal Binary Data}
 \description{
-Visualisation of longitudinal binary text data
-(year x keyword indicator matrix) by a locally weighted Jaccard
+Visualisation of longitudinal binary data
+(a time-by-attribute 0/1 matrix) by a locally weighted Jaccard
 distance, multidimensional scaling with sequential modification
 in the sense of Mizuta (2003), Ward clustering on a trajectory
 distance, and a functional Rousseeuw silhouette criterion for
