@@ -81,11 +81,16 @@ plot(fit, type = "means")
 plot(fit, type = "panels")
 ```
 
+A pre-rendered animation produced exactly by the call below
+ships with the package and is shown here:
+
 ```{r fig16, eval = FALSE}
-gif <- lj_animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
+gif <- lj_animate(fit, file = "peace_declaration.gif",
+                  trail = 10, fps = 2)
 ```
 
-The GIF is omitted from the vignette build but can be produced
-by running the call above; it writes a 78-frame animation with
-fading-trail centroids and font sizes proportional to the
-smoothed occurrence.
+```{r fig16-show, echo = FALSE, out.width = "100%"}
+knitr::include_graphics(
+  system.file("extdata", "peace_declaration.gif", package = "ljmds")
+)
+```

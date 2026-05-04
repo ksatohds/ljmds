@@ -105,11 +105,16 @@ plot(fit, type = "panels")
 
 ### Figure 9: animated trajectory map (GIF)
 
+A pre-rendered animation produced exactly by the call below
+ships with the package and is shown here:
+
 ```{r fig9, eval = FALSE}
-gif <- lj_animate(fit, file = "inaugural.gif", trail = 7, fps = 2)
+gif <- lj_animate(fit, file = "inaugural.gif",
+                  trail = 7, fps = 2)
 ```
 
-The GIF is omitted from this vignette to keep the build light;
-running `lj_animate(fit, "inaugural.gif")` writes a 59-frame
-animation in which keyword font sizes vary with the smoothed
-occurrence and a fading trail of class centroids is overlaid.
+```{r fig9-show, echo = FALSE, out.width = "100%"}
+knitr::include_graphics(
+  system.file("extdata", "inaugural.gif", package = "ljmds")
+)
+```
