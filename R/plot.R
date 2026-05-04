@@ -92,9 +92,12 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 }
 
 .plot_panels <- function(x, cols, ...) {
-  op <- graphics::par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
+  k  <- x$k
+  nr <- floor(sqrt(k))
+  nc <- ceiling(k / nr)
+  op <- graphics::par(mfrow = c(nr, nc), mar = c(4, 4, 2, 1))
   on.exit(graphics::par(op))
-  for (j in seq_len(x$k)) {
+  for (j in seq_len(k)) {
     members <- which(x$labels == j)
     graphics::plot(c(0, 0), type = "n",
                    xlim = range(x$t), ylim = c(0, 1),
