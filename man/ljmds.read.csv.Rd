@@ -2,27 +2,45 @@
 % Please edit documentation in R/data.R
 \name{ljmds.read.csv}
 \alias{ljmds.read.csv}
-\title{Read a longitudinal binary keyword corpus from CSV}
+\title{Read a longitudinal binary keyword corpus}
 \usage{
-ljmds.read.csv(file)
+ljmds.read.csv(name = c("peace_declaration", "inaugural"), file = NULL)
 }
 \arguments{
-\item{file}{Path to the CSV.}
+\item{name}{Built-in corpus name; one of \code{"peace_declaration"} or
+\code{"inaugural"}.  Ignored if \code{file} is supplied.  Defaults to
+\code{"peace_declaration"}.}
+
+\item{file}{Optional path to a user-supplied CSV.  When given,
+\code{name} is ignored and the file is read directly.}
 }
 \value{
 A list with components \code{t} (numeric n-vector of times),
 \code{X} (n x p binary matrix), \code{keywords} (column names of X).
 }
 \description{
-The CSV must have a header row, with column 1 named \code{year} (or
-another time variable, e.g. calendar year) and columns 2.. giving
-\eqn{\{0,1\}} indicators of keyword presence in each row's time
-point.
+Reads a CSV in which column 1 is the time variable (e.g. calendar
+year) and columns 2.. are 0/1 indicators of attribute presence at
+each time point.  Two example corpora ship with the package and
+can be loaded by name; an external CSV can be loaded by passing a
+path to \code{file}.
 }
 \examples{
-f <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-d <- ljmds.read.csv(f)
+# Built-in Peace Declaration of Hiroshima
+d <- ljmds.read.csv("peace_declaration")
 dim(d$X)              # 78 95
-length(d$t)           # 78
-head(d$keywords)      # first six keywords
+
+# Built-in US Presidential Inaugural Addresses
+d <- ljmds.read.csv("inaugural")
+dim(d$X)              # 59 106
+
+\dontrun{
+# User-supplied CSV (column 1 = year, columns 2.. = 0/1)
+d <- ljmds.read.csv(file = "my_corpus.csv")
+}
+}
+\seealso{
+\code{\link[=ljmds.pipeline]{ljmds.pipeline()}} for the full pipeline at fixed
+\verb{(h, k)}, \code{\link[=ljmds.select]{ljmds.select()}} for joint \verb{(h, k)} selection,
+and \link{ljmds_data} for a description of the bundled CSVs.
 }

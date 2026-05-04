@@ -29,3 +29,8 @@ Rousseeuw, P.J. (1987) Silhouettes: a graphical aid to
 the interpretation and validation of cluster analysis.
 \emph{Journal of Computational and Applied Mathematics} \strong{20}, 53--65.
 }
+\seealso{
+\code{\link[=ljmds.pipeline]{ljmds.pipeline()}} which produces the \verb{(f, labels)}
+inputs, \code{\link[=ljmds.select]{ljmds.select()}} which uses this criterion to pick
+\verb{(h, k)}.
+}

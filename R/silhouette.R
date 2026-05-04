@@ -12,6 +12,9 @@
 #' @references Rousseeuw, P.J. (1987) Silhouettes: a graphical aid to
 #'   the interpretation and validation of cluster analysis.
 #'   *Journal of Computational and Applied Mathematics* **20**, 53--65.
+#' @seealso [ljmds.pipeline()] which produces the `(f, labels)`
+#'   inputs, [ljmds.select()] which uses this criterion to pick
+#'   `(h, k)`.
 #' @export
 ljmds.silhouette <- function(f, cl) {
   mean(ljmds.silhouette.per.keyword(f, cl))

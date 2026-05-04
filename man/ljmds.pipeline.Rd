@@ -34,3 +34,10 @@ and Ward clustering.  Returns the cluster labels, the per-time
 configurations, the trajectory distance, the smoothed curves and
 the class mean curves.
 }
+\seealso{
+\code{\link[=ljmds.read.csv]{ljmds.read.csv()}} to load a corpus,
+\code{\link[=ljmds.select]{ljmds.select()}} to choose \verb{(h, k)} from a grid,
+\code{\link[=ljmds.silhouette]{ljmds.silhouette()}} for the criterion used inside
+\code{ljmds.select()}, \code{\link[=plot.ljmds]{plot.ljmds()}} for diagnostic figures,
+\code{\link[=ljmds.animate]{ljmds.animate()}} to render a GIF.
+}

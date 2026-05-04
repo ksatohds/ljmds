@@ -36,3 +36,7 @@ redrawn each year with font size proportional to the smoothed
 occurrence \eqn{f_j(t)}, class colours, and a fading trail of the
 class centroids over the previous \code{trail} frames.
 }
+\seealso{
+\code{\link[=ljmds.pipeline]{ljmds.pipeline()}} which produces the input object,
+\code{\link[=plot.ljmds]{plot.ljmds()}} for the static counterparts of the animation.
+}

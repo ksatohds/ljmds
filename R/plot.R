@@ -15,6 +15,9 @@
 #'   `"means"`, `"panels"`.
 #' @param mycol Optional 4-colour palette for the classes.
 #' @param ... Further arguments passed to underlying plot calls.
+#' @seealso [ljmds.pipeline()] which produces the object,
+#'   [ljmds.select()] for `(h, k)` selection, [ljmds.animate()] for
+#'   the dynamic counterpart.
 #' @export
 plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
                                     "means", "panels"),

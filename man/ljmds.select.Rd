@@ -33,3 +33,8 @@ Rousseeuw silhouette of the resulting partition.  Returns the
 grid of silhouette values and the maximizer over \code{k >= k_min}
 (default 3, to avoid the trivial k = 2 split).
 }
+\seealso{
+\code{\link[=ljmds.pipeline]{ljmds.pipeline()}} to run the analysis at the chosen
+\verb{(h, k)}, \code{\link[=ljmds.silhouette]{ljmds.silhouette()}} for the criterion used here,
+\code{\link[=plot.ljmds_sel]{plot.ljmds_sel()}} to visualise the grid of silhouette values.
+}

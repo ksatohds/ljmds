@@ -13,6 +13,8 @@
 #' @param frame_dir Optional directory to keep the per-frame PNGs;
 #'   if `NULL` (default) a temporary directory is used.
 #' @return The output GIF file path (invisibly).
+#' @seealso [ljmds.pipeline()] which produces the input object,
+#'   [plot.ljmds()] for the static counterparts of the animation.
 #' @export
 ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        trail = 7, fps = 2,

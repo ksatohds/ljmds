@@ -5,9 +5,9 @@
 \title{Built-in example corpora}
 \description{
 Two longitudinal binary keyword corpora ship with the package as
-CSV files in \code{inst/extdata}, accessible via \code{\link[=system.file]{system.file()}}.
-No source text is included; the matrices are 0/1 indicators of
-the presence of each (lemmatised) keyword in each year's text.
+CSV files in \code{inst/extdata}.  No source text is included; the
+matrices are 0/1 indicators of the presence of each (lemmatised)
+keyword in each time point.
 }
 \details{
 \itemize{
@@ -22,9 +22,11 @@ Hiroshima.
 \section{Loading}{
 
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{f <- system.file("extdata", "peace_declaration.csv",
-                 package = "ljmds")
-d <- ljmds.read.csv(f)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{d <- ljmds.read.csv("peace_declaration")   # or "inaugural"
 }\if{html}{\out{</div>}}
 }
 
+\seealso{
+\code{\link[=ljmds.read.csv]{ljmds.read.csv()}} to load the data, \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}
+for the full analysis pipeline.
+}

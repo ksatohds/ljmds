@@ -16,6 +16,9 @@
 #'   - `h_hat`, `k_hat`: maximizer over k >= k_min,
 #'   - `S_hat`: silhouette at the maximizer,
 #'   - `h_grid`, `k_grid`, `k_min`.
+#' @seealso [ljmds.pipeline()] to run the analysis at the chosen
+#'   `(h, k)`, [ljmds.silhouette()] for the criterion used here,
+#'   [plot.ljmds_sel()] to visualise the grid of silhouette values.
 #' @export
 ljmds.select <- function(X, t, h_grid, k_grid = 2:6, k_min = 3) {
   S <- matrix(NA_real_, length(h_grid), length(k_grid),

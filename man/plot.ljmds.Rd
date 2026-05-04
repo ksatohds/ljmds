@@ -37,3 +37,8 @@ modified MDS configuration (Figure of \code{inaug_trajectory}/
 individual smoothed curves and the class mean.
 }
 }
+\seealso{
+\code{\link[=ljmds.pipeline]{ljmds.pipeline()}} which produces the object,
+\code{\link[=ljmds.select]{ljmds.select()}} for \verb{(h, k)} selection, \code{\link[=ljmds.animate]{ljmds.animate()}} for
+the dynamic counterpart.
+}

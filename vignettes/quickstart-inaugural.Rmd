@@ -30,8 +30,7 @@ and columns 2.. are 0/1 indicators of keyword presence (no source
 text is included).
 
 ```{r load}
-csv <- system.file("extdata", "inaugural.csv", package = "ljmds")
-d   <- ljmds.read.csv(csv)
+d <- ljmds.read.csv("inaugural")
 dim(d$X)                  # 59 x 106
 range(d$t)                # 1789 2021
 head(d$keywords, 10)

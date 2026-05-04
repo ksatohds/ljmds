@@ -18,6 +18,11 @@
 #'   - `f`: n x p smoothed occurrence curves,
 #'   - `m`: n x k class mean curves,
 #'   - `t`, `h`, `k`, `keywords`.
+#' @seealso [ljmds.read.csv()] to load a corpus,
+#'   [ljmds.select()] to choose `(h, k)` from a grid,
+#'   [ljmds.silhouette()] for the criterion used inside
+#'   `ljmds.select()`, [plot.ljmds()] for diagnostic figures,
+#'   [ljmds.animate()] to render a GIF.
 #' @export
 ljmds.pipeline <- function(X, t, h, k) {
   X <- as.matrix(X); X[X > 0] <- 1

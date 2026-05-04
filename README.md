@@ -30,9 +30,10 @@ remotes::install_github("ksatohds/ljmds", build_vignettes = TRUE)
 ```r
 library(ljmds)
 
-# Peace Declaration of Hiroshima
-csv <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-d   <- ljmds.read.csv(csv)             # year + 95 keyword 0/1 columns
+# Peace Declaration of Hiroshima (built-in)
+d <- ljmds.read.csv("peace_declaration")   # year + 95 keyword 0/1 columns
+# d <- ljmds.read.csv("inaugural")          # alternative built-in
+# d <- ljmds.read.csv(file = "my.csv")      # external CSV
 
 # Joint (h, k) selection over a grid
 sel <- ljmds.select(d$X, d$t,

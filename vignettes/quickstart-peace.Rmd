@@ -26,8 +26,7 @@ library(ljmds)
 ## 1. Load the corpus from CSV
 
 ```{r load}
-csv <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
-d   <- ljmds.read.csv(csv)
+d <- ljmds.read.csv("peace_declaration")
 dim(d$X)                  # 78 x 95
 range(d$t)                # 1947 2025
 head(d$keywords, 10)
