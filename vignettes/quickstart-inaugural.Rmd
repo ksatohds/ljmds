@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>",
-  fig.width = 7, fig.height = 6, dpi = 80
+  fig.width = 7, fig.height = 6, dpi = 72,
+  cache = TRUE
 )
 ```
 
@@ -38,10 +39,13 @@ head(d$keywords, 10)
 
 ## 2. Joint (h, k) selection
 
+A coarse grid is used here so the vignette builds quickly;
+a finer grid is recommended in practice.
+
 ```{r select}
 sel <- lj_select(d$X, d$t,
-                 h_grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100, 150),
-                 k_grid = 2:6)
+                 h_grid = c(20, 30, 50, 70, 100),
+                 k_grid = 3:5)
 sel$h_hat
 sel$k_hat
 round(sel$S, 3)
