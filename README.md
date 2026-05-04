@@ -1,11 +1,22 @@
-# ljmds: Local Jaccard MDS for Longitudinal Binary Text Data
+# ljmds: Local Jaccard MDS for Longitudinal Binary Indicator Data
 
 R package implementing the methodology of Satoh (2026): visualisation
-of longitudinal binary text data (year × keyword indicator matrix) by
-a locally weighted Jaccard distance, multidimensional scaling with
+of longitudinal binary indicator data (time × attribute 0/1 matrix)
+by a locally weighted Jaccard distance, multidimensional scaling with
 sequential modification (Mizuta, 2003), Ward clustering on a
 trajectory distance, and a functional Rousseeuw silhouette criterion
 for joint selection of bandwidth and class number.
+
+## Animated examples
+
+Each frame plots the keywords on the modified MDS configuration
+$\bm{y}_j(t)$ at calendar year $t$, with font size proportional to
+the smoothed occurrence $f_j(t)$ and a fading trail of class
+centroids over the previous frames.
+
+| Peace Declaration of Hiroshima (1947–2025, $h = 8$, $k = 4$) | US Presidential Inaugural Addresses (1789–2021, $h = 50$, $k = 4$) |
+|:---:|:---:|
+| ![Peace Declaration animation](inst/extdata/peace_declaration.gif) | ![Inaugural Addresses animation](inst/extdata/inaugural.gif) |
 
 ## Installation
 
