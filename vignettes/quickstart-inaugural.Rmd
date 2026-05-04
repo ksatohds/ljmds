@@ -1,0 +1,109 @@
+---
+title: "Quick start: US Presidential Inaugural Addresses"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick start: US Presidential Inaugural Addresses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  fig.width = 7, fig.height = 6, dpi = 80
+)
+```
+
+This vignette reproduces the figures used in Section 4 of the
+companion paper, applied to the US Presidential Inaugural
+Addresses corpus shipped with the package.
+
+```{r setup}
+library(ljmds)
+```
+
+## 1. Load the corpus from CSV
+
+The corpus ships as a CSV in which column 1 is the calendar year
+and columns 2.. are 0/1 indicators of keyword presence (no source
+text is included).
+
+```{r load}
+csv <- system.file("extdata", "inaugural.csv", package = "ljmds")
+d   <- lj_read_csv(csv)
+dim(d$X)                  # 59 x 106
+range(d$t)                # 1789 2021
+head(d$keywords, 10)
+```
+
+## 2. Joint (h, k) selection
+
+```{r select}
+sel <- lj_select(d$X, d$t,
+                 h_grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100, 150),
+                 k_grid = 2:6)
+sel$h_hat
+sel$k_hat
+round(sel$S, 3)
+```
+
+The functional Rousseeuw silhouette is maximised on the
+admissible set $k \ge 3$ at the value reported above; the paper
+adopts $k = 4$ after a hierarchical-refinement check.
+
+## 3. Run the pipeline at $(k, h) = (4, 50)$
+
+```{r fit}
+fit <- lj_pipeline(d$X, d$t, h = 50, k = 4)
+```
+
+## 4. Figures from the paper
+
+### Figure 3: cluster centroid trajectories
+
+```{r fig3, fig.cap = "Centroid trajectories on the modified MDS configuration."}
+plot(fit, type = "trajectory")
+```
+
+### Figure 4: Ward dendrogram
+
+```{r fig4, fig.cap = "Ward dendrogram on the trajectory distance H."}
+plot(fit, type = "dendrogram")
+```
+
+### Figure 5(a): joint selection grid
+
+```{r fig5a, fig.cap = "Functional silhouette over (h, k)."}
+plot(sel)
+```
+
+### Figure 5(b): Sankey-style flow from k=3 to k=4 (omitted in the package, see paper).
+
+### Figure 6: time-collapsed MDS map
+
+```{r fig6, fig.cap = "Classical MDS of H, coloured by class."}
+plot(fit, type = "cmd")
+```
+
+### Figure 7: class mean curves
+
+```{r fig7, fig.cap = "Class mean occurrence curves."}
+plot(fit, type = "means")
+```
+
+### Figure 8: per-class small multiples
+
+```{r fig8, fig.cap = "Individual smoothed curves and class means."}
+plot(fit, type = "panels")
+```
+
+### Figure 9: animated trajectory map (GIF)
+
+```{r fig9, eval = FALSE}
+gif <- lj_animate(fit, file = "inaugural.gif", trail = 7, fps = 2)
+```
+
+The GIF is omitted from this vignette to keep the build light;
+running `lj_animate(fit, "inaugural.gif")` writes a 59-frame
+animation in which keyword font sizes vary with the smoothed
+occurrence and a fading trail of class centroids is overlaid.

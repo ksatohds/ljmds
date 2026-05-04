@@ -1,0 +1,77 @@
+#' Animated visualisation of the configuration map
+#'
+#' Generates a GIF in which keyword positions \eqn{\bm{y}_j(t)} are
+#' redrawn each year with font size proportional to the smoothed
+#' occurrence \eqn{f_j(t)}, class colours, and a fading trail of the
+#' class centroids over the previous `trail` frames.
+#'
+#' @param x An object returned by [lj_pipeline()].
+#' @param file Output GIF path.
+#' @param trail Number of trailing frames for the centroid trail.
+#' @param fps Frames per second.
+#' @param mycol Optional 4-colour palette.
+#' @param frame_dir Optional directory to keep the per-frame PNGs;
+#'   if `NULL` (default) a temporary directory is used.
+#' @return The output GIF file path (invisibly).
+#' @export
+lj_animate <- function(x, file = "ljmds_animation.gif",
+                       trail = 7, fps = 2,
+                       mycol = c("green4", "purple", "red", "orange"),
+                       frame_dir = NULL) {
+  stopifnot(inherits(x, "ljmds"))
+  if (!requireNamespace("magick", quietly = TRUE))
+    stop("Package 'magick' is required for lj_animate().")
+
+  n <- nrow(x$xs); p <- ncol(x$xs)
+  cols <- mycol[(seq_len(x$k) - 1) %% length(mycol) + 1]
+  cl_cols <- cols[x$labels]
+  cent_x <- matrix(0, n, x$k); cent_y <- matrix(0, n, x$k)
+  for (j in seq_len(x$k)) {
+    members <- which(x$labels == j)
+    cent_x[, j] <- if (length(members) > 1) rowMeans(x$xs[, members]) else x$xs[, members]
+    cent_y[, j] <- if (length(members) > 1) rowMeans(x$ys[, members]) else x$ys[, members]
+  }
+
+  myrange <- c(-0.4, 0.4)
+
+  if (is.null(frame_dir)) frame_dir <- tempfile("ljmds_frames_")
+  dir.create(frame_dir, showWarnings = FALSE, recursive = TRUE)
+  on.exit(unlink(frame_dir, recursive = TRUE), add = TRUE)
+
+  for (i in 1:n) {
+    fr <- sprintf("%s/frame_%03d.png", frame_dir, i)
+    grDevices::png(fr, pointsize = 18, height = 800, width = 800)
+    graphics::par(mar = c(2, 2, 2, 2))
+    graphics::plot(x$xs[i, ], x$ys[i, ], type = "n",
+                   xlab = "", ylab = "", main = "",
+                   xlim = myrange, ylim = myrange, axes = FALSE)
+    start <- max(1, i - trail)
+    if (i > start) {
+      n_seg <- i - start
+      alphas <- seq(0.10, 1.0, length.out = n_seg)
+      for (j in seq_len(x$k)) {
+        for (m_ in (start + 1):i) {
+          a_ <- alphas[m_ - start]
+          graphics::segments(cent_x[m_ - 1, j], cent_y[m_ - 1, j],
+                             cent_x[m_, j], cent_y[m_, j],
+                             col = grDevices::adjustcolor(cols[j], alpha.f = a_),
+                             lwd = 4)
+        }
+      }
+    }
+    fonts <- 1.5 * x$f[i, ] + 0.5
+    graphics::text(x$xs[i, ], x$ys[i, ], x$keywords, font = 2,
+                   cex = fonts,
+                   col = grDevices::adjustcolor(cl_cols, alpha.f = 0.85))
+    for (j in seq_len(x$k))
+      graphics::points(cent_x[i, j], cent_y[i, j], pch = 21, cex = 2.6,
+                       bg = cols[j], col = "black", lwd = 2)
+    graphics::text(0, 0.35, x$t[i], cex = 3, font = 2)
+    grDevices::dev.off()
+  }
+
+  imgs <- magick::image_read(sprintf("%s/frame_%03d.png", frame_dir, 1:n))
+  magick::image_write(magick::image_animate(imgs, fps = fps, loop = 0),
+                      file)
+  invisible(file)
+}

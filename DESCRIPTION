@@ -1,0 +1,30 @@
+Package: ljmds
+Type: Package
+Title: Local Jaccard MDS for Longitudinal Binary Text Data
+Version: 0.0.1
+Authors@R: person("Kenichi", "Satoh",
+    email = "kenichi-satoh@biwako.shiga-u.ac.jp",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0003-4436-9347"))
+Author: Kenichi Satoh [aut, cre] (<https://orcid.org/0000-0003-4436-9347>)
+Maintainer: Kenichi Satoh <kenichi-satoh@biwako.shiga-u.ac.jp>
+Description: Visualisation of longitudinal binary text data
+    (year x keyword indicator matrix) by a locally weighted Jaccard
+    distance, multidimensional scaling with sequential modification
+    in the sense of Mizuta (2003), Ward clustering on a trajectory
+    distance, and a functional Rousseeuw silhouette criterion for
+    joint selection of bandwidth and class number.  Includes two
+    example corpora (Peace Declaration of Hiroshima 1947-2025 and
+    US Presidential Inaugural Addresses 1789-2021), supplied as
+    binary CSV indicator matrices that contain no source text.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Depends: R (>= 4.0)
+Imports: stats, graphics, grDevices, MASS, magick
+Suggests: knitr, rmarkdown, dendextend
+VignetteBuilder: knitr
+URL: https://github.com/ksatohds/ljmds
+BugReports: https://github.com/ksatohds/ljmds/issues
+RoxygenNote: 7.3.1
+Roxygen: list(markdown = TRUE)

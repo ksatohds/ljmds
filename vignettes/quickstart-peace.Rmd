@@ -1,0 +1,85 @@
+---
+title: "Quick start: Peace Declaration of Hiroshima"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick start: Peace Declaration of Hiroshima}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  fig.width = 7, fig.height = 6, dpi = 80
+)
+```
+
+This vignette reproduces the figures used in Section 5 of the
+companion paper, applied to the Peace Declaration of Hiroshima
+1947--2025 (the 1950 declaration was not delivered).
+
+```{r setup}
+library(ljmds)
+```
+
+## 1. Load the corpus from CSV
+
+```{r load}
+csv <- system.file("extdata", "peace_declaration.csv", package = "ljmds")
+d   <- lj_read_csv(csv)
+dim(d$X)                  # 78 x 95
+range(d$t)                # 1947 2025
+head(d$keywords, 10)
+```
+
+## 2. Joint (h, k) selection
+
+```{r select}
+sel <- lj_select(d$X, d$t,
+                 h_grid = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 20, 30, 50),
+                 k_grid = 2:6)
+sel$h_hat
+sel$k_hat
+round(sel$S, 3)
+```
+
+## 3. Run the pipeline at $(k, h) = (4, 8)$
+
+```{r fit}
+fit <- lj_pipeline(d$X, d$t, h = 8, k = 4)
+```
+
+## 4. Figures from the paper
+
+```{r fig10, fig.cap = "Cluster centroid trajectories."}
+plot(fit, type = "trajectory")
+```
+
+```{r fig11, fig.cap = "Ward dendrogram on H."}
+plot(fit, type = "dendrogram")
+```
+
+```{r fig12, fig.cap = "Joint silhouette grid."}
+plot(sel)
+```
+
+```{r fig13, fig.cap = "Time-collapsed MDS map."}
+plot(fit, type = "cmd")
+```
+
+```{r fig14, fig.cap = "Class mean occurrence curves."}
+plot(fit, type = "means")
+```
+
+```{r fig15, fig.cap = "Per-class smoothed curves."}
+plot(fit, type = "panels")
+```
+
+```{r fig16, eval = FALSE}
+gif <- lj_animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
+```
+
+The GIF is omitted from the vignette build but can be produced
+by running the call above; it writes a 78-frame animation with
+fading-trail centroids and font sizes proportional to the
+smoothed occurrence.
