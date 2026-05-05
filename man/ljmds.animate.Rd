@@ -16,27 +16,43 @@ ljmds.animate(
 \arguments{
 \item{x}{An object returned by \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}.}
 
-\item{file}{Output GIF path.}
+\item{file}{Output GIF path (used only when \pkg{magick} is
+available).}
 
 \item{trail}{Number of trailing frames for the centroid trail.}
 
-\item{fps}{Frames per second.}
+\item{fps}{Frames per second of the GIF.}
 
 \item{class.col}{Optional colour palette for the classes.
-Defaults to the current R palette (\code{grDevices::palette.colors(8, "Classic Tableau")});
+Defaults to \code{grDevices::palette.colors(8, "Classic Tableau")},
 recycled if \code{k} exceeds its length.}
 
-\item{frame.dir}{Optional directory to keep the per-frame PNGs;
-if \code{NULL} (default) a temporary directory is used.}
+\item{frame.dir}{Optional directory in which to write the
+per-frame PNGs.  If \code{NULL} (default) and \pkg{magick} is
+available, a temporary directory is used and removed after
+the GIF has been written; if \pkg{magick} is not available,
+a fresh directory \code{ljmds_frames} is created in the current
+working directory and kept (so the frames are not lost).}
 }
 \value{
-The output GIF file path (invisibly).
+Invisibly, the GIF file path when \pkg{magick} is
+available, otherwise the directory containing the per-frame
+PNGs.
 }
 \description{
-Generates a GIF in which keyword positions \eqn{\bm{y}_j(t)} are
-redrawn each year with font size proportional to the smoothed
-occurrence \eqn{f_j(t)}, class colours, and a fading trail of the
-class centroids over the previous \code{trail} frames.
+Renders one PNG frame per observed time point on the modified
+MDS configuration: each attribute is drawn at
+\eqn{\bm{y}_j(t)} with symbol size proportional to the smoothed
+occurrence \eqn{f_j(t)}, class colours, and a fading trail of
+the class centroids over the previous \code{trail} frames.
+}
+\details{
+Frame generation uses only base R graphics, so it works in a
+minimal install.  When the \pkg{magick} package is available
+the per-time PNGs are additionally assembled into a GIF
+animation; otherwise the GIF assembly step is skipped (with a
+message) and the frames are kept on disk so the user can
+assemble the GIF later by another tool.
 }
 \seealso{
 \code{\link[=ljmds.pipeline]{ljmds.pipeline()}} which produces the input object,

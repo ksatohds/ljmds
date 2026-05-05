@@ -21,8 +21,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
 Depends: R (>= 4.0)
-Imports: stats, graphics, grDevices, utils, magick
-Suggests: knitr, rmarkdown, dendextend
+Imports: stats, graphics, grDevices, utils
+Suggests: knitr, rmarkdown, dendextend, magick
 VignetteBuilder: knitr
 URL: https://github.com/ksatohds/ljmds
 BugReports: https://github.com/ksatohds/ljmds/issues

@@ -1,20 +1,35 @@
 #' Animated visualisation of the configuration map
 #'
-#' Generates a GIF in which keyword positions \eqn{\bm{y}_j(t)} are
-#' redrawn each year with font size proportional to the smoothed
-#' occurrence \eqn{f_j(t)}, class colours, and a fading trail of the
-#' class centroids over the previous `trail` frames.
+#' Renders one PNG frame per observed time point on the modified
+#' MDS configuration: each attribute is drawn at
+#' \eqn{\bm{y}_j(t)} with symbol size proportional to the smoothed
+#' occurrence \eqn{f_j(t)}, class colours, and a fading trail of
+#' the class centroids over the previous `trail` frames.
+#'
+#' Frame generation uses only base R graphics, so it works in a
+#' minimal install.  When the \pkg{magick} package is available
+#' the per-time PNGs are additionally assembled into a GIF
+#' animation; otherwise the GIF assembly step is skipped (with a
+#' message) and the frames are kept on disk so the user can
+#' assemble the GIF later by another tool.
 #'
 #' @param x An object returned by [ljmds.pipeline()].
-#' @param file Output GIF path.
+#' @param file Output GIF path (used only when \pkg{magick} is
+#'   available).
 #' @param trail Number of trailing frames for the centroid trail.
-#' @param fps Frames per second.
+#' @param fps Frames per second of the GIF.
 #' @param class.col Optional colour palette for the classes.
-#'   Defaults to the current R palette (`grDevices::palette.colors(8, "Classic Tableau")`);
+#'   Defaults to `grDevices::palette.colors(8, "Classic Tableau")`,
 #'   recycled if `k` exceeds its length.
-#' @param frame.dir Optional directory to keep the per-frame PNGs;
-#'   if `NULL` (default) a temporary directory is used.
-#' @return The output GIF file path (invisibly).
+#' @param frame.dir Optional directory in which to write the
+#'   per-frame PNGs.  If `NULL` (default) and \pkg{magick} is
+#'   available, a temporary directory is used and removed after
+#'   the GIF has been written; if \pkg{magick} is not available,
+#'   a fresh directory `ljmds_frames` is created in the current
+#'   working directory and kept (so the frames are not lost).
+#' @return Invisibly, the GIF file path when \pkg{magick} is
+#'   available, otherwise the directory containing the per-frame
+#'   PNGs.
 #' @seealso [ljmds.pipeline()] which produces the input object,
 #'   [plot.ljmds()] for the static counterparts of the animation.
 #' @export
@@ -23,8 +38,8 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        class.col = grDevices::palette.colors(8, "Classic Tableau"),
                        frame.dir = NULL) {
   stopifnot(inherits(x, "ljmds"))
-  if (!requireNamespace("magick", quietly = TRUE))
-    stop("Package 'magick' is required for ljmds.animate().")
+
+  has_magick <- requireNamespace("magick", quietly = TRUE)
 
   n <- nrow(x$xs); p <- ncol(x$xs)
   cols <- class.col[(seq_len(x$k) - 1) %% length(class.col) + 1]
@@ -42,9 +57,16 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
   xlim_all <- range(x$xs)
   ylim_all <- range(x$ys)
 
-  cleanup <- is.null(frame.dir)
-  if (cleanup) frame.dir <- tempfile("ljmds_frames_")
+  ## Decide the frame directory and whether to clean up after
+  ## GIF assembly.  When magick is missing we always keep the
+  ## frames so the user does not silently lose them.
+  user_supplied <- !is.null(frame.dir)
+  if (!user_supplied) {
+    frame.dir <- if (has_magick) tempfile("ljmds_frames_")
+                 else            file.path(getwd(), "ljmds_frames")
+  }
   dir.create(frame.dir, showWarnings = FALSE, recursive = TRUE)
+  cleanup <- has_magick && !user_supplied
   if (cleanup)
     on.exit(unlink(frame.dir, recursive = TRUE), add = TRUE)
 
@@ -83,8 +105,16 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
     grDevices::dev.off()
   }
 
-  imgs <- magick::image_read(sprintf("%s/frame_%03d.png", frame.dir, 1:n))
-  magick::image_write(magick::image_animate(imgs, fps = fps, loop = 0),
-                      file)
-  invisible(file)
+  if (has_magick) {
+    imgs <- magick::image_read(sprintf("%s/frame_%03d.png",
+                                       frame.dir, 1:n))
+    magick::image_write(magick::image_animate(imgs, fps = fps, loop = 0),
+                        file)
+    invisible(file)
+  } else {
+    message("Package 'magick' is not installed; ",
+            "skipping GIF assembly.  Per-frame PNGs are at:\n  ",
+            normalizePath(frame.dir))
+    invisible(frame.dir)
+  }
 }
