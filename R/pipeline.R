@@ -49,12 +49,17 @@ ljmds.pipeline <- function(X, t, h, k) {
     if (is.null(old)) old <- res
     Y <- as.matrix(old); Xm <- as.matrix(res)
     B  <- t(Xm) %*% Y %*% t(Y) %*% Xm
-    eg <- eigen(B); P <- eg$vectors
-    ev <- pmax(eg$values, 0)
-    Bhalf  <- P %*% diag(sqrt(ev)) %*% t(P)
-    IBhalf <- tryCatch(solve(Bhalf),
-                       error = function(e) MASS::ginv(Bhalf))
-    Q <- IBhalf %*% t(Xm) %*% Y
+    ## B is 2x2 symmetric PSD; use a single eigendecomposition to
+    ## form the Moore--Penrose pseudo-inverse of B^{1/2}.  This is
+    ## numerically continuous at singularity (small eigenvalues
+    ## are clipped to zero by `tol`), needs no external package,
+    ## and reuses one decomposition only.
+    eg <- eigen(B, symmetric = TRUE); P <- eg$vectors
+    sv <- sqrt(pmax(eg$values, 0))
+    tol <- sqrt(.Machine$double.eps) * max(sv)
+    inv_sv <- ifelse(sv > tol, 1 / sv, 0)
+    IBhalf <- P %*% diag(inv_sv, nrow = length(inv_sv)) %*% t(P)
+    Q   <- IBhalf %*% t(Xm) %*% Y
     res <- Xm %*% Q
     xs[i, ] <- res[, 1]; ys[i, ] <- res[, 2]; old <- res
   }
