@@ -117,7 +117,7 @@ browseURL(gif_path)              # open in default browser
 ```
 
 ```{r show-gif, echo = FALSE, out.width = "100%"}
-knitr::include_graphics(gif_path)
+knitr::include_graphics("eurovision.gif")
 ```
 
 To regenerate the GIF from the fitted object (writes a new file

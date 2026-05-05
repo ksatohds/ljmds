@@ -19,12 +19,12 @@ grid.
 
 | Peace Declaration of Hiroshima (1947–2025, $h = 8$, $k = 4$) | US Presidential Inaugural Addresses (1789–2021, $h = 50$, $k = 3$) | Eurovision Song Contest (1956–2023, $h = 20$, $k = 5$) |
 |:---:|:---:|:---:|
-| ![Peace Declaration animation](inst/extdata/peace_declaration.gif) | ![Inaugural Addresses animation](inst/extdata/inaugural.gif) | ![Eurovision animation](inst/extdata/eurovision.gif) |
+| ![Peace Declaration animation](man/figures/peace_declaration.gif) | ![Inaugural Addresses animation](man/figures/inaugural.gif) | ![Eurovision animation](man/figures/eurovision.gif) |
 
 ## Installation
 
 ```r
-# Install from GitHub (private — request access from the author)
+# Install from GitHub
 remotes::install_github("ksatohds/ljmds", build_vignettes = TRUE)
 ```
 
@@ -91,10 +91,10 @@ text** — they are derivative summaries.
   corpus were retained as keywords.
 - **Year coverage**: 78 years (1950 omitted because no
   declaration was delivered that year).
-- **Reproducibility scripts**: `R取得20260504.R` (rvest scrape)
-  and `R前処理20260504.R` (UDPipe + quanteda) in the project
-  data directory; the bundled CSV is the final 0/1 matrix
-  without any source text.
+- **Reproducibility**: the source texts were scraped with
+  rvest, then tokenized and filtered with UDPipe + quanteda;
+  the bundled CSV is the final 0/1 matrix without any source
+  text.
 
 #### `inaugural.csv` (59 × 106, 1789–2021)
 - **Source**: derived from the `data_corpus_inaugural` object
