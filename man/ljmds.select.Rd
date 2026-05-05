@@ -4,7 +4,7 @@
 \alias{ljmds.select}
 \title{Joint (h, k) selection by functional Rousseeuw silhouette}
 \usage{
-ljmds.select(X, t, h.grid, k.grid = 2:6, k.min = 3)
+ljmds.select(X, t, h.grid, k.grid = 3:6)
 }
 \arguments{
 \item{X}{Integer/numeric n x p matrix of 0/1 keyword occurrences.}
@@ -13,25 +13,29 @@ ljmds.select(X, t, h.grid, k.grid = 2:6, k.min = 3)
 
 \item{h.grid}{Numeric vector of candidate bandwidths.}
 
-\item{k.grid}{Integer vector of candidate class numbers.}
-
-\item{k.min}{Smallest k considered admissible (default 3).}
+\item{k.grid}{Integer vector of candidate class numbers; the
+default \code{3:6} excludes the trivial \code{k = 2} split.}
 }
 \value{
 A list with class \code{"ljmds.sel"}:
 \itemize{
 \item \code{S}: matrix of silhouette values, rows = h.grid, cols = k.grid,
-\item \code{h.hat}, \code{k.hat}: maximizer over k >= k.min,
+\item \code{h.hat}, \code{k.hat}: maximizer over the supplied grid,
 \item \code{S.hat}: silhouette at the maximizer,
-\item \code{h.grid}, \code{k.grid}, \code{k.min}.
+\item \code{h.grid}, \code{k.grid}.
 }
 }
 \description{
 For each candidate bandwidth \code{h.grid[i]} and class number
 \code{k.grid[j]}, runs \code{\link[=ljmds.pipeline]{ljmds.pipeline()}} and computes the functional
 Rousseeuw silhouette of the resulting partition.  Returns the
-grid of silhouette values and the maximizer over \code{k >= k.min}
-(default 3, to avoid the trivial k = 2 split).
+grid of silhouette values and the maximizer over \verb{(h, k)}.
+}
+\details{
+The trivial \code{k = 2} split typically gives a silhouette value
+larger than any admissible (\code{k >= 3}) cell, and \code{k = 1} is not a
+partition at all.  Both are excluded by simply not putting them
+into \code{k.grid}; the default \code{k.grid = 3:6} already does so.
 }
 \seealso{
 \code{\link[=ljmds.pipeline]{ljmds.pipeline()}} to run the analysis at the chosen

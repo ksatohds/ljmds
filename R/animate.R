@@ -36,7 +36,13 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
     cent_y[, j] <- if (length(members) > 1) rowMeans(x$ys[, members]) else x$ys[, members]
   }
 
-  myrange <- c(-0.4, 0.4)
+  ## Common axis range across all frames so that the visible
+  ## extent never changes during the animation.  Expand the data
+  ## bounds by 5 % on each side as a margin.
+  xrng <- range(x$xs); pad_x <- 0.05 * diff(xrng)
+  yrng <- range(x$ys); pad_y <- 0.05 * diff(yrng)
+  xlim_all <- xrng + c(-pad_x, pad_x)
+  ylim_all <- yrng + c(-pad_y, pad_y)
 
   cleanup <- is.null(frame.dir)
   if (cleanup) frame.dir <- tempfile("ljmds_frames_")
@@ -47,10 +53,10 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
   for (i in 1:n) {
     fr <- sprintf("%s/frame_%03d.png", frame.dir, i)
     grDevices::png(fr, pointsize = 18, height = 800, width = 800)
-    graphics::par(mar = c(2, 2, 2, 2))
+    graphics::par(mar = c(0.5, 0.5, 0.5, 0.5))
     graphics::plot(x$xs[i, ], x$ys[i, ], type = "n",
                    xlab = "", ylab = "", main = "",
-                   xlim = myrange, ylim = myrange, axes = FALSE)
+                   xlim = xlim_all, ylim = ylim_all, axes = FALSE)
     start <- max(1, i - trail)
     if (i > start) {
       n_seg <- i - start
@@ -72,7 +78,9 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
     for (j in seq_len(x$k))
       graphics::points(cent_x[i, j], cent_y[i, j], pch = 21, cex = 2.6,
                        bg = cols[j], col = "black", lwd = 2)
-    graphics::text(0, 0.35, x$t[i], cex = 3, font = 2)
+    graphics::text(mean(xlim_all),
+                   ylim_all[2] - 0.07 * diff(ylim_all),
+                   x$t[i], cex = 3, font = 2)
     grDevices::dev.off()
   }
 
