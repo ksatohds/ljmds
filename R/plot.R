@@ -138,7 +138,7 @@ plot.ljmds.sel <- function(x,
   S_disp <- S; S_disp[!is.finite(S_disp)] <- NA
   npal <- length(pal)
 
-  graphics::par(mar = c(4.5, 4.5, 2, 8))
+  graphics::par(mar = c(4.5, 4.5, 2, 10))
   graphics::image(seq_along(hg), seq_along(kg), S_disp,
                   col = pal, axes = FALSE, zlim = zr,
                   xlab = expression(bandwidth ~ h),
