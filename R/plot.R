@@ -2,19 +2,25 @@
 #'
 #' Reproduces the diagnostic figures used in Satoh (2026):
 #' - `"trajectory"`: cluster centroid trajectories on the
-#'    modified MDS configuration (Figure of `inaug_trajectory`/
-#'    `trajectorysd10` in the paper).
-#' - `"dendrogram"`: Ward dendrogram on H with k boxes.
+#'    modified MDS configuration.
+#' - `"dendrogram"`: Ward dendrogram on H with k coloured boxes.
 #' - `"cmd"`: time-collapsed MDS map of H, points coloured by class.
-#' - `"means"`: class mean curves on the same axes.
-#' - `"panels"`: 2x2 small multiples, one panel per class, showing
-#'    individual smoothed curves and the class mean.
+#' - `"means"`: class-mean smoothed occurrence curves.
+#' - `"panels"`: all keywords overlaid on a single panel; per
+#'    class, individual smoothed occurrence curves are drawn as
+#'    thin semi-transparent lines and the class mean as a thick
+#'    opaque line of the same colour.
+#'
+#' All five figure types are drawn without a `main` title so the
+#' caller can place a caption externally (e.g. in a LaTeX
+#' `figure` environment).
 #'
 #' @param x An object returned by [ljmds.pipeline()].
 #' @param type One of `"trajectory"`, `"dendrogram"`, `"cmd"`,
 #'   `"means"`, `"panels"`.
 #' @param class.col Optional colour palette for the classes.
-#'   Defaults to the current R palette (`grDevices::palette.colors(8, "Classic Tableau")`);
+#'   Defaults to the current R palette
+#'   (`grDevices::palette.colors(8, "Classic Tableau")`);
 #'   recycled if `k` exceeds its length.
 #' @param ... Further arguments passed to underlying plot calls.
 #' @seealso [ljmds.pipeline()] which produces the object,
@@ -50,7 +56,7 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
   yrange <- range(cent_y) + c(-0.10, 0.10) * diff(range(cent_y))
   graphics::plot(0, 0, type = "n",
                  xlim = xrange, ylim = yrange,
-                 xlab = "", ylab = "", ...)
+                 xlab = "", ylab = "", main = "", ...)
   for (j in seq_len(x$k))
     graphics::lines(cent_x[, j], cent_y[, j], col = cols[j], lwd = 4)
   j0 <- c(1, length(x$t))
@@ -66,7 +72,8 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 }
 
 .plot_dendrogram <- function(x, cols, ...) {
-  graphics::plot(x$hc, cex = 0.5, hang = -1, ...)
+  graphics::plot(x$hc, cex = 0.5, hang = -1,
+                 main = "", sub = "", xlab = "", ...)
   ## rect.dendrogram / rect.hclust draws k boxes from left to right
   ## in dendrogram order; assign each box the colour of the class it
   ## actually contains so the boxes match Table / trajectory / means.
@@ -83,7 +90,7 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 .plot_cmd <- function(x, cols, ...) {
   cmd <- stats::cmdscale(stats::as.dist(x$H))
   cl_cols <- cols[x$labels]
-  graphics::plot(cmd, type = "n", xlab = "", ylab = "", ...)
+  graphics::plot(cmd, type = "n", xlab = "", ylab = "", main = "", ...)
   graphics::text(cmd[, 1], cmd[, 2], labels = rownames(cmd),
                  col = cl_cols, cex = 0.85)
 }
@@ -93,7 +100,7 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
                  xlim = range(x$t), ylim = c(0, 1),
                  xlab = "calendar year",
                  ylab = "occurrence probability",
-                 main = "class mean curves", ...)
+                 main = "", ...)
   for (j in seq_len(x$k))
     graphics::lines(x$t, x$m[, j], col = cols[j], lwd = 6)
   graphics::legend("top", bg = "white", ncol = x$k,
@@ -102,23 +109,39 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 }
 
 .plot_panels <- function(x, cols, ...) {
-  k  <- x$k
-  nc <- ceiling(sqrt(k))
-  nr <- ceiling(k / nc)
-  op <- graphics::par(mfrow = c(nr, nc), mar = c(4, 4, 2, 1))
+  ## All classes overlaid on a single panel.  Per class: thin
+  ## semi-transparent lines for the individual keywords and a
+  ## thick opaque line for the class mean.  Each class gets its
+  ## own colour from `cols`.  The legend is drawn outside the
+  ## plot region on the right so it never collides with the
+  ## curves.
+  k <- x$k
+  op <- graphics::par(mar = c(4.2, 4.2, 1.0, 9), xpd = FALSE)
   on.exit(graphics::par(op))
+  graphics::plot(c(0, 0), type = "n",
+                 xlim = range(x$t), ylim = c(0, 1),
+                 xlab = "calendar year",
+                 ylab = "occurrence probability",
+                 main = "", ...)
   for (j in seq_len(k)) {
     members <- which(x$labels == j)
-    graphics::plot(c(0, 0), type = "n",
-                   xlim = range(x$t), ylim = c(0, 1),
-                   xlab = "calendar year",
-                   ylab = "occurrence probability",
-                   main = sprintf("Class %d (n = %d)", j, length(members)),
-                   ...)
+    thin_col <- grDevices::adjustcolor(cols[j], alpha.f = 0.65)
     for (jj in members)
-      graphics::lines(x$t, x$f[, jj], lwd = 1, col = "grey60")
-    graphics::lines(x$t, x$m[, j], col = cols[j], lwd = 6)
+      graphics::lines(x$t, x$f[, jj], lwd = 1.6, col = thin_col)
   }
+  for (j in seq_len(k))
+    graphics::lines(x$t, x$m[, j], col = cols[j], lwd = 5)
+  sizes <- tabulate(x$labels, nbins = k)
+  graphics::par(xpd = NA)
+  graphics::legend(x = graphics::par("usr")[2] +
+                        0.02 * diff(graphics::par("usr")[1:2]),
+                   y = graphics::par("usr")[4],
+                   legend = sprintf("class %d\n(n=%d)",
+                                    seq_len(k), sizes),
+                   lwd = 4, col = cols, bty = "n",
+                   y.intersp = 1.5, cex = 0.95)
+  graphics::par(xpd = FALSE)
+  invisible(NULL)
 }
 
 #' @rdname plot.ljmds
@@ -138,12 +161,12 @@ plot.ljmds.sel <- function(x,
   S_disp <- S; S_disp[!is.finite(S_disp)] <- NA
   npal <- length(pal)
 
-  graphics::par(mar = c(4.5, 4.5, 2, 10))
+  graphics::par(mar = c(4.5, 4.5, 1.0, 10))
   graphics::image(seq_along(hg), seq_along(kg), S_disp,
                   col = pal, axes = FALSE, zlim = zr,
                   xlab = expression(bandwidth ~ h),
                   ylab = expression(number ~ of ~ classes ~ k),
-                  main = expression(silhouette ~ S(k, h)), ...)
+                  main = "", ...)
   graphics::axis(1, at = seq_along(hg), labels = hg)
   graphics::axis(2, at = seq_along(kg), labels = kg, las = 1)
   graphics::box()

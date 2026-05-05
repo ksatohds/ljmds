@@ -21,7 +21,8 @@
 \code{"means"}, \code{"panels"}.}
 
 \item{class.col}{Optional colour palette for the classes.
-Defaults to the current R palette (\code{grDevices::palette.colors(8, "Classic Tableau")});
+Defaults to the current R palette
+(\code{grDevices::palette.colors(8, "Classic Tableau")});
 recycled if \code{k} exceeds its length.}
 
 \item{...}{Further arguments passed to underlying plot calls.}
@@ -35,14 +36,20 @@ darker.}
 Reproduces the diagnostic figures used in Satoh (2026):
 \itemize{
 \item \code{"trajectory"}: cluster centroid trajectories on the
-modified MDS configuration (Figure of \code{inaug_trajectory}/
-\code{trajectorysd10} in the paper).
-\item \code{"dendrogram"}: Ward dendrogram on H with k boxes.
+modified MDS configuration.
+\item \code{"dendrogram"}: Ward dendrogram on H with k coloured boxes.
 \item \code{"cmd"}: time-collapsed MDS map of H, points coloured by class.
-\item \code{"means"}: class mean curves on the same axes.
-\item \code{"panels"}: 2x2 small multiples, one panel per class, showing
-individual smoothed curves and the class mean.
+\item \code{"means"}: class-mean smoothed occurrence curves.
+\item \code{"panels"}: all keywords overlaid on a single panel; per
+class, individual smoothed occurrence curves are drawn as
+thin semi-transparent lines and the class mean as a thick
+opaque line of the same colour.
 }
+}
+\details{
+All five figure types are drawn without a \code{main} title so the
+caller can place a caption externally (e.g. in a LaTeX
+\code{figure} environment).
 }
 \seealso{
 \code{\link[=ljmds.pipeline]{ljmds.pipeline()}} which produces the object,
