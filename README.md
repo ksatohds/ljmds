@@ -72,13 +72,71 @@ Three longitudinal binary datasets ship under `inst/extdata`:
 | `eurovision.csv`        | 68 × 52 | Non-text | Eurovision Song Contest country participation, 1956–2023 |
 
 Each file has a header row, column 1 named `year`, and columns 2..
-giving 0/1 indicators (keyword presence for the first two, country
-participation for the third). The first two contain **no source
-text** — they are derivative summaries; the third is a non-text
-example showing that the methodology applies beyond text mining
-(`eurovision.csv` is derived from the [Amsterdam Music Lab
-Mirovision](https://github.com/Amsterdam-Music-Lab/mirovision)
-project, MIT-licensed).
+giving 0/1 indicators. The first two contain **no source
+text** — they are derivative summaries.
+
+### Provenance
+
+#### `peace_declaration.csv` (78 × 95, 1947–2025)
+- **Source**: scraped from the City of Hiroshima official site
+  (English Peace Declarations) at
+  <https://www.city.hiroshima.lg.jp/english/>.
+- **Pre-processing**: tokenization, part-of-speech filtering and
+  lemmatization with [UDPipe](https://lindat.mff.cuni.cz/services/udpipe/)
+  (Straka & Straková, 2017) using the English Universal
+  Dependencies model `english-ewt-ud-2.5-191206.udpipe`
+  (CC-BY-SA-NC). Adjacent noun pairs were merged into compound
+  keywords (e.g. `atomic_bomb`, `nuclear_weapons`,
+  `United_Nations`); words appearing 20+ times in the whole
+  corpus were retained as keywords.
+- **Year coverage**: 78 years (1950 omitted because no
+  declaration was delivered that year).
+- **Reproducibility scripts**: `R取得20260504.R` (rvest scrape)
+  and `R前処理20260504.R` (UDPipe + quanteda) in the project
+  data directory; the bundled CSV is the final 0/1 matrix
+  without any source text.
+
+#### `inaugural.csv` (59 × 106, 1789–2021)
+- **Source**: derived from the `data_corpus_inaugural` object
+  shipped with the [`quanteda`](https://quanteda.io/) R package
+  (Benoit, K. et al., 2018, *JOSS* 3(30), 774).
+- **Pre-processing**: same UDPipe + quanteda pipeline as the
+  Peace Declarations; words appearing 50+ times retained as
+  keywords; adjacent noun pairs merged (e.g. `United_States`).
+- **Year coverage**: 59 inaugural addresses delivered between
+  1789 (Washington) and 2021 (Biden), at roughly four-year
+  cadence.
+
+#### `eurovision.csv` (68 × 52, 1956–2023)
+- **Source**: derived from the **Eurovision dataset** of
+  Spijkervet (2020) and the **Mirovision** living-dataset
+  project of Burgoyne, Spijkervet & Baker (2023) at
+  <https://github.com/Amsterdam-Music-Lab/mirovision>,
+  released under the MIT licence by the
+  [Amsterdam Music Lab](https://amsmusiclab.nl/) at the
+  University of Amsterdam.
+- **Pre-processing**: each row is a contest year, each column
+  is a country, and the cell is 1 when that country fielded a
+  contestant in that year and 0 otherwise. The 2020 contest was
+  cancelled and is absent from the matrix.
+- **Year coverage**: 68 contest years from 1956 (the first
+  Eurovision Song Contest) to 2023.
+- **Citations**:
+  - Spijkervet, J. (2020). *The Eurovision Dataset* (version 1.0).
+    Zenodo. [doi:10.5281/zenodo.4036457](https://doi.org/10.5281/zenodo.4036457)
+  - Burgoyne, J. A., Spijkervet, J. & Baker, D. J. (2023).
+    Measuring the Eurovision Song Contest: a living dataset for
+    real-world MIR. In *Proc. 24th International Society for
+    Music Information Retrieval Conference (ISMIR)*, Milan,
+    Italy. <https://archives.ismir.net/ismir2023/paper/000097.pdf>
+
+### Loading
+
+```r
+d <- ljmds.read.csv("peace_declaration")  # or "inaugural" / "eurovision"
+str(d)                       # list(t = numeric n, X = n×p 0/1 matrix,
+                             #      keywords = column names of X)
+```
 
 ## Vignettes
 
