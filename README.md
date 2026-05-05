@@ -140,6 +140,9 @@ str(d)                       # list(t = numeric n, X = n×p 0/1 matrix,
 
 ## Vignettes
 
+Online versions are available at
+<https://ksatohds.github.io/ljmds/articles/index.html>.
+
 ```r
 vignette("quickstart-peace", package = "ljmds")
 vignette("quickstart-inaugural", package = "ljmds")
