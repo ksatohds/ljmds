@@ -24,7 +24,8 @@ Depends: R (>= 4.0)
 Imports: stats, graphics, grDevices, utils
 Suggests: knitr, rmarkdown, dendextend, magick
 VignetteBuilder: knitr
-URL: https://github.com/ksatohds/ljmds
+URL: https://ksatohds.github.io/ljmds/,
+    https://github.com/ksatohds/ljmds
 BugReports: https://github.com/ksatohds/ljmds/issues
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
