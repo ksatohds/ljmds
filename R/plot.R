@@ -44,6 +44,17 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
   invisible(x)
 }
 
+## Helper: extract xlab / ylab / main / sub from `...`, supplying
+## defaults when the caller did not pass them explicitly.  Any
+## remaining graphical arguments in `...` are returned untouched
+## so the caller can forward them to plot().
+.with_defaults <- function(dots, ...) {
+  defaults <- list(...)
+  for (nm in names(defaults))
+    if (is.null(dots[[nm]])) dots[[nm]] <- defaults[[nm]]
+  dots
+}
+
 .plot_trajectory <- function(x, cols, ...) {
   cent_x <- matrix(0, nrow(x$xs), x$k)
   cent_y <- matrix(0, nrow(x$ys), x$k)
@@ -54,9 +65,11 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
   }
   xrange <- range(cent_x) + c(-0.05, 0.20) * diff(range(cent_x))
   yrange <- range(cent_y) + c(-0.10, 0.10) * diff(range(cent_y))
-  graphics::plot(0, 0, type = "n",
-                 xlim = xrange, ylim = yrange,
-                 xlab = "", ylab = "", main = "", ...)
+  args <- .with_defaults(list(...), xlab = "", ylab = "", main = "")
+  do.call(graphics::plot,
+          c(list(x = 0, y = 0, type = "n",
+                 xlim = xrange, ylim = yrange),
+            args))
   for (j in seq_len(x$k))
     graphics::lines(cent_x[, j], cent_y[, j], col = cols[j], lwd = 4)
   j0 <- c(1, length(x$t))
@@ -72,8 +85,10 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 }
 
 .plot_dendrogram <- function(x, cols, ...) {
-  graphics::plot(x$hc, cex = 0.5, hang = -1,
-                 main = "", sub = "", xlab = "", ...)
+  args <- .with_defaults(list(...),
+                         main = "", sub = "", xlab = "", ylab = "Height")
+  do.call(graphics::plot,
+          c(list(x = x$hc, cex = 0.5, hang = -1), args))
   ## rect.dendrogram / rect.hclust draws k boxes from left to right
   ## in dendrogram order; assign each box the colour of the class it
   ## actually contains so the boxes match Table / trajectory / means.
@@ -90,17 +105,22 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 .plot_cmd <- function(x, cols, ...) {
   cmd <- stats::cmdscale(stats::as.dist(x$H))
   cl_cols <- cols[x$labels]
-  graphics::plot(cmd, type = "n", xlab = "", ylab = "", main = "", ...)
+  args <- .with_defaults(list(...), xlab = "", ylab = "", main = "")
+  do.call(graphics::plot,
+          c(list(x = cmd, type = "n"), args))
   graphics::text(cmd[, 1], cmd[, 2], labels = rownames(cmd),
                  col = cl_cols, cex = 0.85)
 }
 
 .plot_means <- function(x, cols, ...) {
-  graphics::plot(c(0, 0), type = "n",
-                 xlim = range(x$t), ylim = c(0, 1),
-                 xlab = "calendar year",
-                 ylab = "occurrence probability",
-                 main = "", ...)
+  args <- .with_defaults(list(...),
+                         xlab = "time",
+                         ylab = "occurrence probability",
+                         main = "")
+  do.call(graphics::plot,
+          c(list(x = c(0, 0), type = "n",
+                 xlim = range(x$t), ylim = c(0, 1)),
+            args))
   for (j in seq_len(x$k))
     graphics::lines(x$t, x$m[, j], col = cols[j], lwd = 6)
   graphics::legend("top", bg = "white", ncol = x$k,
@@ -118,11 +138,14 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
   k <- x$k
   op <- graphics::par(mar = c(4.2, 4.2, 1.0, 9), xpd = FALSE)
   on.exit(graphics::par(op))
-  graphics::plot(c(0, 0), type = "n",
-                 xlim = range(x$t), ylim = c(0, 1),
-                 xlab = "calendar year",
-                 ylab = "occurrence probability",
-                 main = "", ...)
+  args <- .with_defaults(list(...),
+                         xlab = "time",
+                         ylab = "occurrence probability",
+                         main = "")
+  do.call(graphics::plot,
+          c(list(x = c(0, 0), type = "n",
+                 xlim = range(x$t), ylim = c(0, 1)),
+            args))
   for (j in seq_len(k)) {
     members <- which(x$labels == j)
     thin_col <- grDevices::adjustcolor(cols[j], alpha.f = 0.65)
@@ -162,11 +185,14 @@ plot.ljmds.sel <- function(x,
   npal <- length(pal)
 
   graphics::par(mar = c(4.5, 4.5, 1.0, 10))
-  graphics::image(seq_along(hg), seq_along(kg), S_disp,
-                  col = pal, axes = FALSE, zlim = zr,
-                  xlab = expression(bandwidth ~ h),
-                  ylab = expression(number ~ of ~ classes ~ k),
-                  main = "", ...)
+  args <- .with_defaults(list(...),
+                         xlab = expression(bandwidth ~ h),
+                         ylab = expression(number ~ of ~ classes ~ k),
+                         main = "")
+  do.call(graphics::image,
+          c(list(x = seq_along(hg), y = seq_along(kg), z = S_disp,
+                 col = pal, axes = FALSE, zlim = zr),
+            args))
   graphics::axis(1, at = seq_along(hg), labels = hg)
   graphics::axis(2, at = seq_along(kg), labels = kg, las = 1)
   graphics::box()
