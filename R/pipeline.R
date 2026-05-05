@@ -69,10 +69,17 @@ ljmds.pipeline <- function(X, t, h, k) {
   hc  <- stats::hclust(stats::as.dist(H), method = "ward.D2")
   cl  <- stats::cutree(hc, k = k)
 
-  ## Reorder cluster IDs to match left-to-right dendrogram order
-  perm_inv <- unique(cl[hc$order])
-  perm     <- order(perm_inv)
-  cl       <- perm[cl]
+  ## Reorder cluster IDs deterministically: descending class size,
+  ## ties broken by ascending sum of column indices.  Independent of
+  ## dendrogram subtree orientation, so the labelling is reproducible
+  ## across runs and BLAS builds.
+  sizes <- tabulate(cl, nbins = k)
+  idx.sum <- vapply(seq_len(k),
+                    function(j) sum(which(cl == j)),
+                    numeric(1))
+  new.order <- order(-sizes, idx.sum)
+  perm <- order(new.order)
+  cl   <- perm[cl]
 
   ## Class mean curves
   m <- matrix(0, n, k)
