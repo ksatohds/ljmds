@@ -67,11 +67,16 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 
 .plot_dendrogram <- function(x, cols, ...) {
   graphics::plot(x$hc, cex = 0.5, hang = -1, ...)
+  ## rect.dendrogram / rect.hclust draws k boxes from left to right
+  ## in dendrogram order; assign each box the colour of the class it
+  ## actually contains so the boxes match Table / trajectory / means.
+  cls_LtoR <- unique(x$labels[x$hc$order])
+  box_cols <- cols[cls_LtoR]
   if (requireNamespace("dendextend", quietly = TRUE)) {
     dendextend::rect.dendrogram(stats::as.dendrogram(x$hc),
-                                k = x$k, border = cols, lwd = 3)
+                                k = x$k, border = box_cols, lwd = 3)
   } else {
-    stats::rect.hclust(x$hc, k = x$k, border = cols)
+    stats::rect.hclust(x$hc, k = x$k, border = box_cols)
   }
 }
 
@@ -117,18 +122,73 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 }
 
 #' @rdname plot.ljmds
+#' @param pal Diverging or sequential palette used for the heatmap
+#'   cells of [plot.ljmds.sel()].  Default is a reversed YlGnBu
+#'   sequential palette so that high silhouette values appear
+#'   darker.
 #' @export
-plot.ljmds.sel <- function(x, class.col = grDevices::palette.colors(8, "Classic Tableau"),
+plot.ljmds.sel <- function(x,
+                           pal = grDevices::hcl.colors(64, "YlGnBu",
+                                                       rev = TRUE),
                            ...) {
-  k.grid <- x$k.grid; h.grid <- x$h.grid
-  cols <- class.col[(seq_along(k.grid) - 1) %% length(class.col) + 1]
-  graphics::matplot(h.grid, x$S, type = "b", pch = 19, lty = 1, lwd = 2,
-                    col = cols,
-                    log = "x",
-                    xlab = expression(bandwidth ~ h),
-                    ylab = expression(S(k, h)), ...)
-  graphics::legend("topright", legend = paste0("k=", k.grid),
-                   col = cols, pch = 19, lwd = 2,
-                   bg = "white")
-  graphics::abline(v = x$h.hat, col = "red", lty = 2, lwd = 2)
+  S  <- x$S
+  hg <- x$h.grid
+  kg <- x$k.grid
+  zr <- range(S, finite = TRUE)
+  S_disp <- S; S_disp[!is.finite(S_disp)] <- NA
+  npal <- length(pal)
+
+  graphics::par(mar = c(4.5, 4.5, 2, 8))
+  graphics::image(seq_along(hg), seq_along(kg), S_disp,
+                  col = pal, axes = FALSE, zlim = zr,
+                  xlab = expression(bandwidth ~ h),
+                  ylab = expression(number ~ of ~ classes ~ k),
+                  main = expression(silhouette ~ S(k, h)), ...)
+  graphics::axis(1, at = seq_along(hg), labels = hg)
+  graphics::axis(2, at = seq_along(kg), labels = kg, las = 1)
+  graphics::box()
+
+  ## Cell values; text colour from the luminance of the background.
+  for (i in seq_along(hg))
+    for (j in seq_along(kg)) {
+      fr  <- (S[i, j] - zr[1]) / diff(zr)
+      fr  <- pmin(pmax(fr, 0), 1)
+      idx <- round(1 + fr * (npal - 1))
+      rgb <- grDevices::col2rgb(pal[idx])
+      luma <- 0.299 * rgb["red", ] + 0.587 * rgb["green", ] +
+              0.114 * rgb["blue", ]
+      txt_col <- if (luma < 128) "white" else "black"
+      graphics::text(i, j, sprintf("%.3f", S[i, j]),
+                     col = txt_col, cex = 0.9)
+    }
+
+  ## Red rectangle around the maximizer.
+  i_hat <- which(hg == x$h.hat)
+  j_hat <- which(kg == x$k.hat)
+  graphics::rect(i_hat - 0.5, j_hat - 0.5,
+                 i_hat + 0.5, j_hat + 0.5,
+                 border = "red", lwd = 4)
+
+  ## Vertical colour-bar legend on the right.
+  graphics::par(xpd = NA)
+  legend_x <- length(hg) + 0.85 + c(0, 0.4)
+  legend_y <- seq(0.5, length(kg) + 0.5, length.out = 65)
+  for (m in 1:64)
+    graphics::rect(legend_x[1], legend_y[m],
+                   legend_x[2], legend_y[m + 1],
+                   col = pal[m], border = NA)
+  graphics::rect(legend_x[1], legend_y[1],
+                 legend_x[2], legend_y[65], border = "black")
+  ticks_z <- pretty(zr, 5)
+  ticks_z <- ticks_z[ticks_z >= zr[1] & ticks_z <= zr[2]]
+  for (z in ticks_z) {
+    fr <- (z - zr[1]) / diff(zr)
+    yy <- legend_y[1] + fr * (legend_y[65] - legend_y[1])
+    graphics::segments(legend_x[2], yy,
+                       legend_x[2] + 0.10, yy, col = "black")
+    graphics::text(legend_x[2] + 0.15, yy, sprintf("%.2f", z),
+                   adj = c(0, 0.5), cex = 0.85)
+  }
+  graphics::par(xpd = FALSE)
+  invisible(x)
 }

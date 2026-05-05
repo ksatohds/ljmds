@@ -12,7 +12,7 @@
   ...
 )
 
-\method{plot}{ljmds.sel}(x, class.col = grDevices::palette.colors(8, "Classic Tableau"), ...)
+\method{plot}{ljmds.sel}(x, pal = grDevices::hcl.colors(64, "YlGnBu", rev = TRUE), ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}.}
@@ -25,6 +25,11 @@ Defaults to the current R palette (\code{grDevices::palette.colors(8, "Classic T
 recycled if \code{k} exceeds its length.}
 
 \item{...}{Further arguments passed to underlying plot calls.}
+
+\item{pal}{Diverging or sequential palette used for the heatmap
+cells of \code{\link[=plot.ljmds.sel]{plot.ljmds.sel()}}.  Default is a reversed YlGnBu
+sequential palette so that high silhouette values appear
+darker.}
 }
 \description{
 Reproduces the diagnostic figures used in Satoh (2026):
