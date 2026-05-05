@@ -59,16 +59,22 @@ ljmds.animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
 
 ## Data
 
-Two longitudinal binary keyword corpora ship under `inst/extdata`:
+Three longitudinal binary datasets ship under `inst/extdata`:
 
-| File | n × p | Coverage |
-|---|---|---|
-| `peace_declaration.csv` | 78 × 95 | Peace Declaration of Hiroshima, 1947–2025 (no 1950) |
-| `inaugural.csv`         | 59 × 106 | US Presidential Inaugural Addresses, 1789–2021 |
+| File | n × p | Domain | Coverage |
+|---|---|---|---|
+| `peace_declaration.csv` | 78 × 95 | Text | Peace Declaration of Hiroshima, 1947–2025 (no 1950) |
+| `inaugural.csv`         | 59 × 106 | Text | US Presidential Inaugural Addresses, 1789–2021 |
+| `eurovision.csv`        | 68 × 52 | Non-text | Eurovision Song Contest country participation, 1956–2023 |
 
 Each file has a header row, column 1 named `year`, and columns 2..
-giving 0/1 indicators of keyword presence. **No source text is
-included** — the matrices are derivative summaries.
+giving 0/1 indicators (keyword presence for the first two, country
+participation for the third). The first two contain **no source
+text** — they are derivative summaries; the third is a non-text
+example showing that the methodology applies beyond text mining
+(`eurovision.csv` is derived from the [Amsterdam Music Lab
+Mirovision](https://github.com/Amsterdam-Music-Lab/mirovision)
+project, MIT-licensed).
 
 ## Vignettes
 

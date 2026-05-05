@@ -4,12 +4,15 @@
 \alias{ljmds.read.csv}
 \title{Read a longitudinal binary keyword corpus}
 \usage{
-ljmds.read.csv(name = c("peace_declaration", "inaugural"), file = NULL)
+ljmds.read.csv(
+  name = c("peace_declaration", "inaugural", "eurovision"),
+  file = NULL
+)
 }
 \arguments{
-\item{name}{Built-in corpus name; one of \code{"peace_declaration"} or
-\code{"inaugural"}.  Ignored if \code{file} is supplied.  Defaults to
-\code{"peace_declaration"}.}
+\item{name}{Built-in dataset name; one of \code{"peace_declaration"},
+\code{"inaugural"}, or \code{"eurovision"}.  Ignored if \code{file} is
+supplied.  Defaults to \code{"peace_declaration"}.}
 
 \item{file}{Optional path to a user-supplied CSV.  When given,
 \code{name} is ignored and the file is read directly.}
@@ -33,6 +36,10 @@ dim(d$X)              # 78 95
 # Built-in US Presidential Inaugural Addresses
 d <- ljmds.read.csv("inaugural")
 dim(d$X)              # 59 106
+
+# Built-in Eurovision Song Contest country participation
+d <- ljmds.read.csv("eurovision")
+dim(d$X)              # 68 52
 
 \dontrun{
 # User-supplied CSV (column 1 = year, columns 2.. = 0/1)

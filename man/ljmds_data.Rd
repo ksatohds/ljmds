@@ -2,27 +2,31 @@
 % Please edit documentation in R/data.R
 \name{ljmds_data}
 \alias{ljmds_data}
-\title{Built-in example corpora}
+\title{Built-in example datasets}
 \description{
-Two longitudinal binary keyword corpora ship with the package as
-CSV files in \code{inst/extdata}.  No source text is included; the
-matrices are 0/1 indicators of the presence of each (lemmatised)
-keyword in each time point.
+Three longitudinal binary datasets ship with the package as CSV
+files in \code{inst/extdata}.  Each has column 1 = time and columns
+2.. = 0/1 indicators.  The first two are derived from text but
+contain no source text; the third is non-text and demonstrates
+that the methodology applies beyond text mining.
 }
 \details{
 \itemize{
 \item \code{peace_declaration.csv} : 78 years (1947--2025, no 1950),
-95 keywords, derived from the English Peace Declaration of
+95 keyword indicators from the English Peace Declaration of
 Hiroshima.
 \item \code{inaugural.csv} : 59 inaugural addresses (1789--2021),
-106 keywords, derived from the corpus distributed with the
-\code{quanteda} R package.
+106 keyword indicators derived from the corpus distributed
+with the \code{quanteda} R package.
+\item \code{eurovision.csv} : 68 contest years (1956--2023), 52 country
+participation indicators in the Eurovision Song Contest.
+Source: Amsterdam Music Lab Mirovision dataset (MIT licence).
 }
 }
 \section{Loading}{
 
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{d <- ljmds.read.csv("peace_declaration")   # or "inaugural"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{d <- ljmds.read.csv("peace_declaration")   # or "inaugural", "eurovision"
 }\if{html}{\out{</div>}}
 }
 
