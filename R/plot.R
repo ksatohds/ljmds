@@ -98,8 +98,8 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 
 .plot_panels <- function(x, cols, ...) {
   k  <- x$k
-  nr <- floor(sqrt(k))
-  nc <- ceiling(k / nr)
+  nc <- ceiling(sqrt(k))
+  nr <- ceiling(k / nc)
   op <- graphics::par(mfrow = c(nr, nc), mar = c(4, 4, 2, 1))
   on.exit(graphics::par(op))
   for (j in seq_len(k)) {
