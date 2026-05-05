@@ -38,9 +38,11 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
 
   myrange <- c(-0.4, 0.4)
 
-  if (is.null(frame.dir)) frame.dir <- tempfile("ljmds_frames_")
+  cleanup <- is.null(frame.dir)
+  if (cleanup) frame.dir <- tempfile("ljmds_frames_")
   dir.create(frame.dir, showWarnings = FALSE, recursive = TRUE)
-  on.exit(unlink(frame.dir, recursive = TRUE), add = TRUE)
+  if (cleanup)
+    on.exit(unlink(frame.dir, recursive = TRUE), add = TRUE)
 
   for (i in 1:n) {
     fr <- sprintf("%s/frame_%03d.png", frame.dir, i)
