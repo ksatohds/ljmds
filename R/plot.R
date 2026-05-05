@@ -14,7 +14,7 @@
 #' @param type One of `"trajectory"`, `"dendrogram"`, `"cmd"`,
 #'   `"means"`, `"panels"`.
 #' @param class.col Optional colour palette for the classes.
-#'   Defaults to the current R palette (`grDevices::palette()`);
+#'   Defaults to the current R palette (`grDevices::palette.colors(8, "Classic Tableau")`);
 #'   recycled if `k` exceeds its length.
 #' @param ... Further arguments passed to underlying plot calls.
 #' @seealso [ljmds.pipeline()] which produces the object,
@@ -23,7 +23,7 @@
 #' @export
 plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
                                     "means", "panels"),
-                       class.col = grDevices::palette(),
+                       class.col = grDevices::palette.colors(8, "Classic Tableau"),
                        ...) {
   type <- match.arg(type)
   k <- x$k
@@ -118,7 +118,7 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 
 #' @rdname plot.ljmds
 #' @export
-plot.ljmds.sel <- function(x, class.col = grDevices::palette(),
+plot.ljmds.sel <- function(x, class.col = grDevices::palette.colors(8, "Classic Tableau"),
                            ...) {
   k.grid <- x$k.grid; h.grid <- x$h.grid
   cols <- class.col[(seq_along(k.grid) - 1) %% length(class.col) + 1]

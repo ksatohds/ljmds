@@ -8,11 +8,11 @@
 \method{plot}{ljmds}(
   x,
   type = c("trajectory", "dendrogram", "cmd", "means", "panels"),
-  class.col = grDevices::palette(),
+  class.col = grDevices::palette.colors(8, "Classic Tableau"),
   ...
 )
 
-\method{plot}{ljmds.sel}(x, class.col = grDevices::palette(), ...)
+\method{plot}{ljmds.sel}(x, class.col = grDevices::palette.colors(8, "Classic Tableau"), ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}.}
@@ -21,7 +21,7 @@
 \code{"means"}, \code{"panels"}.}
 
 \item{class.col}{Optional colour palette for the classes.
-Defaults to the current R palette (\code{grDevices::palette()});
+Defaults to the current R palette (\code{grDevices::palette.colors(8, "Classic Tableau")});
 recycled if \code{k} exceeds its length.}
 
 \item{...}{Further arguments passed to underlying plot calls.}

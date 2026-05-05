@@ -10,7 +10,7 @@
 #' @param trail Number of trailing frames for the centroid trail.
 #' @param fps Frames per second.
 #' @param class.col Optional colour palette for the classes.
-#'   Defaults to the current R palette (`grDevices::palette()`);
+#'   Defaults to the current R palette (`grDevices::palette.colors(8, "Classic Tableau")`);
 #'   recycled if `k` exceeds its length.
 #' @param frame.dir Optional directory to keep the per-frame PNGs;
 #'   if `NULL` (default) a temporary directory is used.
@@ -20,7 +20,7 @@
 #' @export
 ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        trail = 7, fps = 2,
-                       class.col = grDevices::palette(),
+                       class.col = grDevices::palette.colors(8, "Classic Tableau"),
                        frame.dir = NULL) {
   stopifnot(inherits(x, "ljmds"))
   if (!requireNamespace("magick", quietly = TRUE))

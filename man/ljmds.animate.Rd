@@ -9,7 +9,7 @@ ljmds.animate(
   file = "ljmds_animation.gif",
   trail = 7,
   fps = 2,
-  class.col = grDevices::palette(),
+  class.col = grDevices::palette.colors(8, "Classic Tableau"),
   frame.dir = NULL
 )
 }
@@ -23,7 +23,7 @@ ljmds.animate(
 \item{fps}{Frames per second.}
 
 \item{class.col}{Optional colour palette for the classes.
-Defaults to the current R palette (\code{grDevices::palette()});
+Defaults to the current R palette (\code{grDevices::palette.colors(8, "Classic Tableau")});
 recycled if \code{k} exceeds its length.}
 
 \item{frame.dir}{Optional directory to keep the per-frame PNGs;
