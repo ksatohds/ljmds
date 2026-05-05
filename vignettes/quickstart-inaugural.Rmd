@@ -40,26 +40,24 @@ head(d$keywords, 10)
 
 A minimal grid is used here so the vignette builds quickly;
 a finer grid is recommended in practice (e.g.,
-`h.grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100, 150)`,
-`k.grid = 2:6`).
+`h.grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100)`).
+The trivial `k = 2` split is excluded by leaving 2 out of
+`k.grid` (default `3:6`).
 
 ```{r select}
 sel <- ljmds.select(d$X, d$t,
-                 h.grid = c(30, 50),
-                 k.grid = 3:4)
+                    h.grid = c(30, 50),
+                    k.grid = 3:4)
 sel$h.hat
 sel$k.hat
+sel$S.hat
 round(sel$S, 3)
 ```
 
-The functional Rousseeuw silhouette is maximised on the
-admissible set $k \ge 3$ at the value reported above; the paper
-adopts $k = 4$ after a hierarchical-refinement check.
-
-## 3. Run the pipeline at $(k, h) = (4, 50)$
+## 3. Run the pipeline at $(k, h) = (3, 50)$
 
 ```{r fit}
-fit <- ljmds.pipeline(d$X, d$t, h = 50, k = 4)
+fit <- ljmds.pipeline(d$X, d$t, h = 50, k = 3)
 ```
 
 ## 4. Figures from the paper
@@ -76,13 +74,11 @@ plot(fit, type = "trajectory")
 plot(fit, type = "dendrogram")
 ```
 
-### Figure 5(a): joint selection grid
+### Figure 5: joint selection heatmap
 
-```{r fig5a, fig.cap = "Functional silhouette over (h, k)."}
+```{r fig5, fig.cap = "Silhouette heatmap S(k, h) with maximizer marker."}
 plot(sel)
 ```
-
-### Figure 5(b): Sankey-style flow from k=3 to k=4 (omitted in the package, see paper).
 
 ### Figure 6: time-collapsed MDS map
 

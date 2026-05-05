@@ -9,14 +9,17 @@ for joint selection of bandwidth and class number.
 
 ## Animated examples
 
-Each frame plots the keywords on the modified MDS configuration
-$\bm{y}_j(t)$ at calendar year $t$, with font size proportional to
-the smoothed occurrence $f_j(t)$ and a fading trail of class
-centroids over the previous frames.
+Each frame plots the attributes on the modified MDS configuration
+$\bm{y}_j(t)$ at calendar year $t$, with font/symbol size proportional
+to the smoothed occurrence $f_j(t)$ and a fading trail of class
+centroids over the previous frames.  Cluster colours follow the
+default Classic Tableau palette and the silhouette criterion
+$\mathcal{S}(k, h)$ jointly selects $(k, h)$ from a user-supplied
+grid.
 
-| Peace Declaration of Hiroshima (1947–2025, $h = 8$, $k = 4$) | US Presidential Inaugural Addresses (1789–2021, $h = 50$, $k = 4$) |
-|:---:|:---:|
-| ![Peace Declaration animation](inst/extdata/peace_declaration.gif) | ![Inaugural Addresses animation](inst/extdata/inaugural.gif) |
+| Peace Declaration of Hiroshima (1947–2025, $h = 8$, $k = 4$) | US Presidential Inaugural Addresses (1789–2021, $h = 50$, $k = 3$) | Eurovision Song Contest (1956–2023, $h = 20$, $k = 5$) |
+|:---:|:---:|:---:|
+| ![Peace Declaration animation](inst/extdata/peace_declaration.gif) | ![Inaugural Addresses animation](inst/extdata/inaugural.gif) | ![Eurovision animation](inst/extdata/eurovision.gif) |
 
 ## Installation
 
@@ -36,22 +39,23 @@ d <- ljmds.read.csv("peace_declaration")   # year + 95 keyword 0/1 columns
 # d <- ljmds.read.csv(file = "my.csv")      # external CSV
 
 # Joint (h, k) selection over a grid
+# k = 1, 2 are excluded by leaving them out of k.grid (default 3:6).
 sel <- ljmds.select(d$X, d$t,
-                 h.grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20, 30, 50),
-                 k.grid = 3:6)
+                    h.grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20))
 sel$h.hat   # 8
 sel$k.hat   # 4
+sel$S.hat   # 0.201
 
 # Full pipeline
 fit <- ljmds.pipeline(d$X, d$t, h = sel$h.hat, k = sel$k.hat)
 
-# Figures
+# Figures (default class.col = grDevices::palette.colors(8, "Classic Tableau"))
 plot(fit, type = "trajectory")    # centroid trajectories on MDS map
 plot(fit, type = "dendrogram")    # Ward dendrogram + class boxes
 plot(fit, type = "cmd")           # time-collapsed MDS of trajectory distance
 plot(fit, type = "means")         # class mean occurrence curves
-plot(fit, type = "panels")        # per-class small multiples
-plot(sel)                          # silhouette over the (h, k) grid
+plot(fit, type = "panels")        # per-class small multiples (square layout)
+plot(sel)                          # silhouette heatmap with maximizer marker
 
 # GIF animation
 ljmds.animate(fit, file = "peace_declaration.gif", trail = 10, fps = 2)
@@ -81,10 +85,12 @@ project, MIT-licensed).
 ```r
 vignette("quickstart-peace", package = "ljmds")
 vignette("quickstart-inaugural", package = "ljmds")
+vignette("quickstart-eurovision", package = "ljmds")
 ```
 
-Each vignette starts from the CSV and reproduces the diagnostic
-figures used in the corresponding application section of the paper.
+Each vignette starts from the bundled CSV and reproduces the
+diagnostic figures used in the corresponding application section
+of the paper.
 
 ## References
 

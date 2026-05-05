@@ -36,15 +36,16 @@ head(d$keywords, 10)
 
 A minimal grid is used here so the vignette builds quickly;
 a finer grid is recommended in practice (e.g.,
-`h.grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20)`,
-`k.grid = 2:6`).
+`h.grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20)`).  The trivial
+`k = 2` split is excluded by leaving 2 out of `k.grid`.
 
 ```{r select}
 sel <- ljmds.select(d$X, d$t,
-                 h.grid = c(8, 12),
-                 k.grid = 3:4)
+                    h.grid = c(8, 12),
+                    k.grid = 3:4)
 sel$h.hat
 sel$k.hat
+sel$S.hat
 round(sel$S, 3)
 ```
 
@@ -64,7 +65,7 @@ plot(fit, type = "trajectory")
 plot(fit, type = "dendrogram")
 ```
 
-```{r fig12, fig.cap = "Joint silhouette grid."}
+```{r fig12, fig.cap = "Silhouette heatmap with maximizer marker."}
 plot(sel)
 ```
 
