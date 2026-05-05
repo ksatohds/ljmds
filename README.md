@@ -37,13 +37,13 @@ d <- ljmds.read.csv("peace_declaration")   # year + 95 keyword 0/1 columns
 
 # Joint (h, k) selection over a grid
 sel <- ljmds.select(d$X, d$t,
-                 h_grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20, 30, 50),
-                 k_grid = 3:6)
-sel$h_hat   # 8
-sel$k_hat   # 4
+                 h.grid = c(3, 4, 5, 6, 8, 10, 12, 15, 20, 30, 50),
+                 k.grid = 3:6)
+sel$h.hat   # 8
+sel$k.hat   # 4
 
 # Full pipeline
-fit <- ljmds.pipeline(d$X, d$t, h = sel$h_hat, k = sel$k_hat)
+fit <- ljmds.pipeline(d$X, d$t, h = sel$h.hat, k = sel$k.hat)
 
 # Figures
 plot(fit, type = "trajectory")    # centroid trajectories on MDS map

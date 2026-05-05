@@ -13,7 +13,9 @@
 #' @param x An object returned by [ljmds.pipeline()].
 #' @param type One of `"trajectory"`, `"dendrogram"`, `"cmd"`,
 #'   `"means"`, `"panels"`.
-#' @param mycol Optional 4-colour palette for the classes.
+#' @param class.col Optional colour palette for the classes.
+#'   Defaults to the current R palette (`grDevices::palette()`);
+#'   recycled if `k` exceeds its length.
 #' @param ... Further arguments passed to underlying plot calls.
 #' @seealso [ljmds.pipeline()] which produces the object,
 #'   [ljmds.select()] for `(h, k)` selection, [ljmds.animate()] for
@@ -21,11 +23,11 @@
 #' @export
 plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
                                     "means", "panels"),
-                       mycol = c("green4", "purple", "red", "orange"),
+                       class.col = grDevices::palette(),
                        ...) {
   type <- match.arg(type)
   k <- x$k
-  cols <- mycol[(seq_len(k) - 1) %% length(mycol) + 1]
+  cols <- class.col[(seq_len(k) - 1) %% length(class.col) + 1]
   switch(type,
     trajectory = .plot_trajectory(x, cols, ...),
     dendrogram = .plot_dendrogram(x, cols, ...),
@@ -116,15 +118,17 @@ plot.ljmds <- function(x, type = c("trajectory", "dendrogram", "cmd",
 
 #' @rdname plot.ljmds
 #' @export
-plot.ljmds_sel <- function(x, mycol = c("green4", "purple", "red", "orange"),
+plot.ljmds.sel <- function(x, class.col = grDevices::palette(),
                            ...) {
-  k_grid <- x$k_grid; h_grid <- x$h_grid
-  graphics::matplot(h_grid, x$S, type = "b", pch = 19, lty = 1, lwd = 2,
+  k.grid <- x$k.grid; h.grid <- x$h.grid
+  cols <- class.col[(seq_along(k.grid) - 1) %% length(class.col) + 1]
+  graphics::matplot(h.grid, x$S, type = "b", pch = 19, lty = 1, lwd = 2,
+                    col = cols,
                     log = "x",
                     xlab = expression(bandwidth ~ h),
                     ylab = expression(S(k, h)), ...)
-  graphics::legend("topright", legend = paste0("k=", k_grid),
-                   col = seq_along(k_grid), pch = 19, lwd = 2,
+  graphics::legend("topright", legend = paste0("k=", k.grid),
+                   col = cols, pch = 19, lwd = 2,
                    bg = "white")
-  graphics::abline(v = x$h_hat, col = "red", lty = 2, lwd = 2)
+  graphics::abline(v = x$h.hat, col = "red", lty = 2, lwd = 2)
 }

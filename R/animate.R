@@ -9,8 +9,10 @@
 #' @param file Output GIF path.
 #' @param trail Number of trailing frames for the centroid trail.
 #' @param fps Frames per second.
-#' @param mycol Optional 4-colour palette.
-#' @param frame_dir Optional directory to keep the per-frame PNGs;
+#' @param class.col Optional colour palette for the classes.
+#'   Defaults to the current R palette (`grDevices::palette()`);
+#'   recycled if `k` exceeds its length.
+#' @param frame.dir Optional directory to keep the per-frame PNGs;
 #'   if `NULL` (default) a temporary directory is used.
 #' @return The output GIF file path (invisibly).
 #' @seealso [ljmds.pipeline()] which produces the input object,
@@ -18,14 +20,14 @@
 #' @export
 ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        trail = 7, fps = 2,
-                       mycol = c("green4", "purple", "red", "orange"),
-                       frame_dir = NULL) {
+                       class.col = grDevices::palette(),
+                       frame.dir = NULL) {
   stopifnot(inherits(x, "ljmds"))
   if (!requireNamespace("magick", quietly = TRUE))
     stop("Package 'magick' is required for ljmds.animate().")
 
   n <- nrow(x$xs); p <- ncol(x$xs)
-  cols <- mycol[(seq_len(x$k) - 1) %% length(mycol) + 1]
+  cols <- class.col[(seq_len(x$k) - 1) %% length(class.col) + 1]
   cl_cols <- cols[x$labels]
   cent_x <- matrix(0, n, x$k); cent_y <- matrix(0, n, x$k)
   for (j in seq_len(x$k)) {
@@ -36,12 +38,12 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
 
   myrange <- c(-0.4, 0.4)
 
-  if (is.null(frame_dir)) frame_dir <- tempfile("ljmds_frames_")
-  dir.create(frame_dir, showWarnings = FALSE, recursive = TRUE)
-  on.exit(unlink(frame_dir, recursive = TRUE), add = TRUE)
+  if (is.null(frame.dir)) frame.dir <- tempfile("ljmds_frames_")
+  dir.create(frame.dir, showWarnings = FALSE, recursive = TRUE)
+  on.exit(unlink(frame.dir, recursive = TRUE), add = TRUE)
 
   for (i in 1:n) {
-    fr <- sprintf("%s/frame_%03d.png", frame_dir, i)
+    fr <- sprintf("%s/frame_%03d.png", frame.dir, i)
     grDevices::png(fr, pointsize = 18, height = 800, width = 800)
     graphics::par(mar = c(2, 2, 2, 2))
     graphics::plot(x$xs[i, ], x$ys[i, ], type = "n",
@@ -72,7 +74,7 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
     grDevices::dev.off()
   }
 
-  imgs <- magick::image_read(sprintf("%s/frame_%03d.png", frame_dir, 1:n))
+  imgs <- magick::image_read(sprintf("%s/frame_%03d.png", frame.dir, 1:n))
   magick::image_write(magick::image_animate(imgs, fps = fps, loop = 0),
                       file)
   invisible(file)

@@ -40,15 +40,15 @@ head(d$keywords, 10)
 
 A minimal grid is used here so the vignette builds quickly;
 a finer grid is recommended in practice (e.g.,
-`h_grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100, 150)`,
-`k_grid = 2:6`).
+`h.grid = c(8, 10, 15, 20, 25, 30, 40, 50, 70, 100, 150)`,
+`k.grid = 2:6`).
 
 ```{r select}
 sel <- ljmds.select(d$X, d$t,
-                 h_grid = c(30, 50),
-                 k_grid = 3:4)
-sel$h_hat
-sel$k_hat
+                 h.grid = c(30, 50),
+                 k.grid = 3:4)
+sel$h.hat
+sel$k.hat
 round(sel$S, 3)
 ```
 

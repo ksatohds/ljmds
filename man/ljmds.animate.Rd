@@ -9,8 +9,8 @@ ljmds.animate(
   file = "ljmds_animation.gif",
   trail = 7,
   fps = 2,
-  mycol = c("green4", "purple", "red", "orange"),
-  frame_dir = NULL
+  class.col = grDevices::palette(),
+  frame.dir = NULL
 )
 }
 \arguments{
@@ -22,9 +22,11 @@ ljmds.animate(
 
 \item{fps}{Frames per second.}
 
-\item{mycol}{Optional 4-colour palette.}
+\item{class.col}{Optional colour palette for the classes.
+Defaults to the current R palette (\code{grDevices::palette()});
+recycled if \code{k} exceeds its length.}
 
-\item{frame_dir}{Optional directory to keep the per-frame PNGs;
+\item{frame.dir}{Optional directory to keep the per-frame PNGs;
 if \code{NULL} (default) a temporary directory is used.}
 }
 \value{

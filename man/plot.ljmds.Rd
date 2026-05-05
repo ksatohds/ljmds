@@ -2,17 +2,17 @@
 % Please edit documentation in R/plot.R
 \name{plot.ljmds}
 \alias{plot.ljmds}
-\alias{plot.ljmds_sel}
+\alias{plot.ljmds.sel}
 \title{Plot methods for ljmds objects}
 \usage{
 \method{plot}{ljmds}(
   x,
   type = c("trajectory", "dendrogram", "cmd", "means", "panels"),
-  mycol = c("green4", "purple", "red", "orange"),
+  class.col = grDevices::palette(),
   ...
 )
 
-\method{plot}{ljmds_sel}(x, mycol = c("green4", "purple", "red", "orange"), ...)
+\method{plot}{ljmds.sel}(x, class.col = grDevices::palette(), ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=ljmds.pipeline]{ljmds.pipeline()}}.}
@@ -20,7 +20,9 @@
 \item{type}{One of \code{"trajectory"}, \code{"dendrogram"}, \code{"cmd"},
 \code{"means"}, \code{"panels"}.}
 
-\item{mycol}{Optional 4-colour palette for the classes.}
+\item{class.col}{Optional colour palette for the classes.
+Defaults to the current R palette (\code{grDevices::palette()});
+recycled if \code{k} exceeds its length.}
 
 \item{...}{Further arguments passed to underlying plot calls.}
 }
