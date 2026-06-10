@@ -24,7 +24,7 @@ A list with components \code{t} (numeric n-vector of times),
 \description{
 Reads a CSV in which column 1 is the time variable (e.g. calendar
 year) and columns 2.. are 0/1 indicators of attribute presence at
-each time point.  Two example corpora ship with the package and
+each time point.  Three example datasets ship with the package and
 can be loaded by name; an external CSV can be loaded by passing a
 path to \code{file}.
 }

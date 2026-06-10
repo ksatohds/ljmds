@@ -43,6 +43,7 @@ functions with continuous argument.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://ksatohds.github.io/ljmds/}
   \item \url{https://github.com/ksatohds/ljmds}
   \item Report bugs at \url{https://github.com/ksatohds/ljmds/issues}
 }

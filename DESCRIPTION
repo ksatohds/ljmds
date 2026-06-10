@@ -14,9 +14,11 @@ Description: Visualisation of longitudinal binary data (a
     modification in the sense of Mizuta (2003), Ward clustering on
     a trajectory distance, and a functional Rousseeuw silhouette
     criterion for joint selection of bandwidth and class number.
-    Includes two example corpora (Peace Declaration of Hiroshima
-    1947-2025 and US Presidential Inaugural Addresses 1789-2021),
-    supplied as binary CSV matrices that contain no source text.
+    Includes three example datasets (Peace Declaration of Hiroshima
+    1947-2025, US Presidential Inaugural Addresses 1789-2021, and
+    Eurovision Song Contest country participation 1956-2023),
+    supplied as binary CSV matrices; the two text corpora contain
+    no source text.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
