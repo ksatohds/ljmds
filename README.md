@@ -72,8 +72,13 @@ Three longitudinal binary datasets ship under `inst/extdata`:
 | `eurovision.csv`        | 68 × 52 | Non-text | Eurovision Song Contest country participation, 1956–2023 |
 
 Each file has a header row, column 1 named `year`, and columns 2..
-giving 0/1 indicators. The first two contain **no source
-text** — they are derivative summaries.
+giving 0/1 indicators. The two text datasets contain **no source
+text, no word order and no frequency information**: each cell records
+only whether a keyword occurred in a given year, so the original
+documents cannot be reconstructed. The bundled CSVs are thus derived
+binary indicator matrices (factual occurrence metadata), not the
+underlying texts; the texts remain the property of their respective
+rights holders (see [Data sources and licenses](#data-sources-and-licenses)).
 
 ### Provenance
 
@@ -163,6 +168,40 @@ of the paper.
   *Journal of the Japanese Society of Computational Statistics*
   **15**(2), 327–333.
 
+## Data sources and licenses
+
+The three bundled CSV files are **derived binary indicator matrices**
+(see [Data](#data) and [Provenance](#provenance)). They contain no
+source text and constitute factual occurrence metadata; the underlying
+sources and their terms are:
+
+- **`inaugural.csv`** — US Presidential Inaugural Addresses are works
+  of the US federal government in the **public domain** (17 U.S.C.
+  §105), obtained from the `data_corpus_inaugural` object of the
+  [`quanteda`](https://quanteda.io/) R package (Benoit et al., 2018).
+- **`peace_declaration.csv`** — the English Peace Declarations are
+  © the City of Hiroshima
+  (<https://www.city.hiroshima.lg.jp/english/>). Only the derived
+  binary occurrence matrix, which contains no source text, is
+  redistributed here.
+- **`eurovision.csv`** — derived from the Eurovision dataset of
+  Spijkervet (2020) and the
+  [Mirovision](https://github.com/Amsterdam-Music-Lab/mirovision)
+  project (Burgoyne, Spijkervet & Baker, 2023), released under the
+  **MIT License, Copyright (c) 2023 Amsterdam Music Lab**.
+
+The two text corpora were preprocessed with the UDPipe English-EWT 2.5
+model (`english-ewt-ud-2.5-191206.udpipe`, CC BY-NC-SA 4.0). The model
+was used **only as an offline tool to create the binary CSVs** (it is
+downloaded by the user at preprocessing time via
+`udpipe::udpipe_download_model()`); it is **not a dependency of this
+package and is not redistributed here**, so its terms do not attach to
+the derived matrices.
+
 ## License
 
-MIT.
+The **`ljmds` package source code** is released under the MIT License
+(see [`LICENSE`](LICENSE), Copyright (c) 2026 Kenichi Satoh). The
+**bundled datasets** are derived binary indicator matrices governed by
+their own source terms, summarized under
+[Data sources and licenses](#data-sources-and-licenses) above.

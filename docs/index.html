@@ -150,7 +150,7 @@
 </tr>
 </tbody>
 </table>
-<p>Each file has a header row, column 1 named <code>year</code>, and columns 2.. giving 0/1 indicators. The first two contain <strong>no source text</strong> — they are derivative summaries.</p>
+<p>Each file has a header row, column 1 named <code>year</code>, and columns 2.. giving 0/1 indicators. The two text datasets contain <strong>no source text, no word order and no frequency information</strong>: each cell records only whether a keyword occurred in a given year, so the original documents cannot be reconstructed. The bundled CSVs are thus derived binary indicator matrices (factual occurrence metadata), not the underlying texts; the texts remain the property of their respective rights holders (see <a href="#data-sources-and-licenses">Data sources and licenses</a>).</p>
 <div class="section level3">
 <h3 id="provenance">Provenance<a class="anchor" aria-label="anchor" href="#provenance"></a>
 </h3>
@@ -233,9 +233,23 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="data-sources-and-licenses">Data sources and licenses<a class="anchor" aria-label="anchor" href="#data-sources-and-licenses"></a>
+</h2>
+<p>The three bundled CSV files are <strong>derived binary indicator matrices</strong> (see <a href="#data">Data</a> and <a href="#provenance">Provenance</a>). They contain no source text and constitute factual occurrence metadata; the underlying sources and their terms are:</p>
+<ul>
+<li>
+<strong><code>inaugural.csv</code></strong> — US Presidential Inaugural Addresses are works of the US federal government in the <strong>public domain</strong> (17 U.S.C. §105), obtained from the <code>data_corpus_inaugural</code> object of the <a href="https://quanteda.io/" class="external-link"><code>quanteda</code></a> R package (Benoit et al., 2018).</li>
+<li>
+<strong><code>peace_declaration.csv</code></strong> — the English Peace Declarations are © the City of Hiroshima (<a href="https://www.city.hiroshima.lg.jp/english/" class="external-link uri">https://www.city.hiroshima.lg.jp/english/</a>). Only the derived binary occurrence matrix, which contains no source text, is redistributed here.</li>
+<li>
+<strong><code>eurovision.csv</code></strong> — derived from the Eurovision dataset of Spijkervet (2020) and the <a href="https://github.com/Amsterdam-Music-Lab/mirovision" class="external-link">Mirovision</a> project (Burgoyne, Spijkervet &amp; Baker, 2023), released under the <strong>MIT License, Copyright (c) 2023 Amsterdam Music Lab</strong>.</li>
+</ul>
+<p>The two text corpora were preprocessed with the UDPipe English-EWT 2.5 model (<code>english-ewt-ud-2.5-191206.udpipe</code>, CC BY-NC-SA 4.0). The model was used <strong>only as an offline tool to create the binary CSVs</strong> (it is downloaded by the user at preprocessing time via <code><a href="https://rdrr.io/pkg/udpipe/man/udpipe_download_model.html" class="external-link">udpipe::udpipe_download_model()</a></code>); it is <strong>not a dependency of this package and is not redistributed here</strong>, so its terms do not attach to the derived matrices.</p>
+</div>
+<div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>MIT.</p>
+<p>The <strong><code>ljmds</code> package source code</strong> is released under the MIT License (see <a href="LICENSE"><code>LICENSE</code></a>, Copyright (c) 2026 Kenichi Satoh). The <strong>bundled datasets</strong> are derived binary indicator matrices governed by their own source terms, summarized under <a href="#data-sources-and-licenses">Data sources and licenses</a> above.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
