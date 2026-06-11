@@ -5,15 +5,19 @@
 \alias{ljmds.silhouette.per.keyword}
 \title{Rousseeuw silhouette in functional L2 space}
 \usage{
-ljmds.silhouette(f, cl)
+ljmds.silhouette(f, cl, type = c("mean", "rms"))
 
-ljmds.silhouette.per.keyword(f, cl)
+ljmds.silhouette.per.keyword(f, cl, type = c("mean", "rms"))
 }
 \arguments{
 \item{f}{Numeric matrix of size n x p; column j is the smoothed
 occurrence curve of keyword j.}
 
 \item{cl}{Integer vector of length p with cluster assignments.}
+
+\item{type}{Aggregation of the within/between distances: \code{"mean"}
+(standard Rousseeuw, the default) or \code{"rms"} (root-mean-square,
+the plug-in estimator of the oracle criterion).}
 }
 \value{
 Mean silhouette width (scalar) or a per-keyword vector.
@@ -23,6 +27,19 @@ Computes Rousseeuw's silhouette (Rousseeuw, 1987) for a partition of
 keywords on the smoothed occurrence curves \eqn{f_j(t)}.  The within
 and between distances are pairwise functional \eqn{L_2} distances.
 Singleton classes contribute zero, following Rousseeuw's convention.
+}
+\details{
+With \code{type = "mean"} (the default) the within- and between-class
+summaries are arithmetic means of the \eqn{L_2} distances, i.e. the
+standard Rousseeuw silhouette.  With \code{type = "rms"} they are
+root-mean-square distances
+(\eqn{\sqrt{|C|^{-1}\sum_i \|f_j-f_i\|_2^2}}); each squared term is
+then an unbiased estimator of the squared oracle distance of the
+homogeneous-noise model, so the resulting criterion is the exact
+plug-in estimator of the oracle criterion.  The two variants select
+the same \verb{(h, k)} on the three bundled datasets; \code{"mean"} is
+retained as the default for its classical interpretation and
+robustness to within-class heterogeneity.
 }
 \references{
 Rousseeuw, P.J. (1987) Silhouettes: a graphical aid to

@@ -21,6 +21,16 @@
 #' @param class.col Optional colour palette for the classes.
 #'   Defaults to `grDevices::palette.colors(8, "Classic Tableau")`,
 #'   recycled if `k` exceeds its length.
+#' @param width,height Frame size in pixels (default `800` x `800`).
+#'   Larger values give higher-resolution frames, e.g. for a
+#'   journal's supplementary video.
+#' @param pointsize Base font size passed to [grDevices::png()]
+#'   (default `18`); scale it with `width`/`height` to keep labels
+#'   legible.
+#' @param res Nominal resolution in ppi passed to [grDevices::png()].
+#'   `NA` (default) reproduces the base 72-ppi behaviour; set e.g.
+#'   `res = 150` together with larger `width`/`height` for
+#'   print-quality frames.
 #' @param frame.dir Optional directory in which to write the
 #'   per-frame PNGs.  If `NULL` (default) and \pkg{magick} is
 #'   available, a temporary directory is used and removed after
@@ -36,7 +46,9 @@
 ljmds.animate <- function(x, file = "ljmds_animation.gif",
                        trail = 7, fps = 2,
                        class.col = grDevices::palette.colors(8, "Classic Tableau"),
-                       frame.dir = NULL) {
+                       frame.dir = NULL,
+                       width = 800, height = 800,
+                       pointsize = 18, res = NA) {
   stopifnot(inherits(x, "ljmds"))
 
   has_magick <- requireNamespace("magick", quietly = TRUE)
@@ -72,7 +84,8 @@ ljmds.animate <- function(x, file = "ljmds_animation.gif",
 
   for (i in 1:n) {
     fr <- sprintf("%s/frame_%03d.png", frame.dir, i)
-    grDevices::png(fr, pointsize = 18, height = 800, width = 800)
+    grDevices::png(fr, width = width, height = height,
+                   pointsize = pointsize, res = res)
     graphics::par(mar = c(0.5, 0.5, 0.5, 0.5))
     graphics::plot(x$xs[i, ], x$ys[i, ], type = "n",
                    xlab = "", ylab = "", main = "",

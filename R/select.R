@@ -15,6 +15,10 @@
 #' @param h.grid Numeric vector of candidate bandwidths.
 #' @param k.grid Integer vector of candidate class numbers; the
 #'   default `3:6` excludes the trivial `k = 2` split.
+#' @param type Silhouette aggregation passed to [ljmds.silhouette()]:
+#'   `"mean"` (standard Rousseeuw, the default) or `"rms"`
+#'   (root-mean-square, the plug-in estimator of the oracle
+#'   criterion).  The maximizer is the same on the bundled datasets.
 #' @return A list with class `"ljmds.sel"`:
 #'   - `S`: matrix of silhouette values, rows = h.grid, cols = k.grid,
 #'   - `h.hat`, `k.hat`: maximizer over the supplied grid,
@@ -24,14 +28,16 @@
 #'   `(h, k)`, [ljmds.silhouette()] for the criterion used here,
 #'   [plot.ljmds.sel()] to visualise the grid of silhouette values.
 #' @export
-ljmds.select <- function(X, t, h.grid, k.grid = 3:6) {
+ljmds.select <- function(X, t, h.grid, k.grid = 3:6,
+                         type = c("mean", "rms")) {
+  type <- match.arg(type)
   S <- matrix(NA_real_, length(h.grid), length(k.grid),
               dimnames = list(paste0("h", h.grid),
                               paste0("k", k.grid)))
   for (i in seq_along(h.grid)) {
     for (j in seq_along(k.grid)) {
       fit <- ljmds.pipeline(X, t, h = h.grid[i], k = k.grid[j])
-      S[i, j] <- ljmds.silhouette(fit$f, fit$labels)
+      S[i, j] <- ljmds.silhouette(fit$f, fit$labels, type = type)
     }
   }
   best <- which(S == max(S, na.rm = TRUE), arr.ind = TRUE)[1, ]

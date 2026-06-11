@@ -4,7 +4,7 @@
 \alias{ljmds.select}
 \title{Joint (h, k) selection by functional Rousseeuw silhouette}
 \usage{
-ljmds.select(X, t, h.grid, k.grid = 3:6)
+ljmds.select(X, t, h.grid, k.grid = 3:6, type = c("mean", "rms"))
 }
 \arguments{
 \item{X}{Integer/numeric n x p matrix of 0/1 keyword occurrences.}
@@ -15,6 +15,11 @@ ljmds.select(X, t, h.grid, k.grid = 3:6)
 
 \item{k.grid}{Integer vector of candidate class numbers; the
 default \code{3:6} excludes the trivial \code{k = 2} split.}
+
+\item{type}{Silhouette aggregation passed to \code{\link[=ljmds.silhouette]{ljmds.silhouette()}}:
+\code{"mean"} (standard Rousseeuw, the default) or \code{"rms"}
+(root-mean-square, the plug-in estimator of the oracle
+criterion).  The maximizer is the same on the bundled datasets.}
 }
 \value{
 A list with class \code{"ljmds.sel"}:

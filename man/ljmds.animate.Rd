@@ -10,7 +10,11 @@ ljmds.animate(
   trail = 7,
   fps = 2,
   class.col = grDevices::palette.colors(8, "Classic Tableau"),
-  frame.dir = NULL
+  frame.dir = NULL,
+  width = 800,
+  height = 800,
+  pointsize = 18,
+  res = NA
 )
 }
 \arguments{
@@ -33,6 +37,19 @@ available, a temporary directory is used and removed after
 the GIF has been written; if \pkg{magick} is not available,
 a fresh directory \code{ljmds_frames} is created in the current
 working directory and kept (so the frames are not lost).}
+
+\item{width, height}{Frame size in pixels (default \code{800} x \code{800}).
+Larger values give higher-resolution frames, e.g. for a
+journal's supplementary video.}
+
+\item{pointsize}{Base font size passed to \code{\link[grDevices:png]{grDevices::png()}}
+(default \code{18}); scale it with \code{width}/\code{height} to keep labels
+legible.}
+
+\item{res}{Nominal resolution in ppi passed to \code{\link[grDevices:png]{grDevices::png()}}.
+\code{NA} (default) reproduces the base 72-ppi behaviour; set e.g.
+\code{res = 150} together with larger \code{width}/\code{height} for
+print-quality frames.}
 }
 \value{
 Invisibly, the GIF file path when \pkg{magick} is
