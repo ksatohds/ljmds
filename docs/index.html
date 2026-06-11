@@ -151,6 +151,9 @@
 </tbody>
 </table>
 <p>Each file has a header row, column 1 named <code>year</code>, and columns 2.. giving 0/1 indicators. The two text datasets contain <strong>no source text, no word order and no frequency information</strong>: each cell records only whether a keyword occurred in a given year, so the original documents cannot be reconstructed. The bundled CSVs are thus derived binary indicator matrices (factual occurrence metadata), not the underlying texts; the texts remain the property of their respective rights holders (see <a href="#data-sources-and-licenses">Data sources and licenses</a>).</p>
+<blockquote>
+<p><strong>Note (why a binary cell may not match a word search of the text).</strong> For the two text corpora the keyword columns are <strong>lemmatized, part-of-speech-filtered nouns</strong>, not the original surface words. A cell is <code>1</code> when the <em>lemma</em> of a noun keyword occurred that year, so a plain text search will not reproduce the matrix exactly — e.g. <code>country</code> covers “countries”, and a word used only as a verb is not counted. The 0/1 values therefore reflect the UDPipe-processed keywords, not raw string occurrences.</p>
+</blockquote>
 <div class="section level3">
 <h3 id="provenance">Provenance<a class="anchor" aria-label="anchor" href="#provenance"></a>
 </h3>

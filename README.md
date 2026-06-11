@@ -80,6 +80,15 @@ binary indicator matrices (factual occurrence metadata), not the
 underlying texts; the texts remain the property of their respective
 rights holders (see [Data sources and licenses](#data-sources-and-licenses)).
 
+> **Note (why a binary cell may not match a word search of the text).**
+> For the two text corpora the keyword columns are **lemmatized,
+> part-of-speech-filtered nouns**, not the original surface words. A
+> cell is `1` when the *lemma* of a noun keyword occurred that year, so
+> a plain text search will not reproduce the matrix exactly — e.g.
+> `country` covers "countries", and a word used only as a verb is not
+> counted. The 0/1 values therefore reflect the UDPipe-processed
+> keywords, not raw string occurrences.
+
 ### Provenance
 
 #### `peace_declaration.csv` (78 × 95, 1947–2025)
