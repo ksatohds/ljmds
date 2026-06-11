@@ -99,7 +99,10 @@ rights holders (see [Data sources and licenses](#data-sources-and-licenses)).
 - **Reproducibility**: the source texts were scraped with
   rvest, then tokenized and filtered with UDPipe + quanteda;
   the bundled CSV is the final 0/1 matrix without any source
-  text.
+  text. The UDPipe model was used only as an offline tool to
+  build the CSV — it is downloaded by the user at preprocessing
+  time (`udpipe::udpipe_download_model()`) and is **not bundled
+  with, nor a dependency of, this package**.
 
 #### `inaugural.csv` (59 × 106, 1789–2021)
 - **Source**: derived from the `data_corpus_inaugural` object

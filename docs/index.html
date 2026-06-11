@@ -166,7 +166,7 @@
 <li>
 <strong>Year coverage</strong>: 78 years (1950 omitted because no declaration was delivered that year).</li>
 <li>
-<strong>Reproducibility</strong>: the source texts were scraped with rvest, then tokenized and filtered with UDPipe + quanteda; the bundled CSV is the final 0/1 matrix without any source text.</li>
+<strong>Reproducibility</strong>: the source texts were scraped with rvest, then tokenized and filtered with UDPipe + quanteda; the bundled CSV is the final 0/1 matrix without any source text. The UDPipe model was used only as an offline tool to build the CSV — it is downloaded by the user at preprocessing time (<code><a href="https://rdrr.io/pkg/udpipe/man/udpipe_download_model.html" class="external-link">udpipe::udpipe_download_model()</a></code>) and is <strong>not bundled with, nor a dependency of, this package</strong>.</li>
 </ul>
 </div>
 <div class="section level4">
